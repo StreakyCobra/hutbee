@@ -4,14 +4,50 @@ services:
 
   traefik:
     image: traefik:v2.0
-    command: --providers.docker
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./acme.json:/acme.json
 
-  hutbee:
-    image: httpd
+  db:
+    image: mongo:4
+    restart: always
+    volumes:
+      - mongo-db:/data/db
+      - mongo-configdb:/data/configdb
+    mem_limit: 1g
+    mem_reservation: 1g
+    command: '--wiredTigerCacheSizeGB 1.0'
+
+  frontend:
+    image: httpd:2.4
+    restart: always
     labels:
-      - "traefik.http.routers.hutbee.rule=Host(`${HOSTNAME}`)"
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend-http.entrypoints=http"
+      - "traefik.http.routers.frontend-http.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.frontend-http.middlewares=frontend-redirect@docker"
+      - "traefik.http.middlewares.frontend-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.frontend-https.entrypoints=https"
+      - "traefik.http.routers.frontend-https.rule=Host(`${HOSTNAME}`)"
+      - "traefik.http.routers.frontend-https.tls.certResolver=letsencrypt"
+
+  backend:
+    image: httpd:2.4
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-http.entrypoints=http"
+      - "traefik.http.routers.backend-http.rule=Host(`backend.${HOSTNAME}`)"
+      - "traefik.http.routers.backend-http.middlewares=backend-redirect@docker"
+      - "traefik.http.middlewares.backend-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.backend-https.entrypoints=https"
+      - "traefik.http.routers.backend-https.rule=Host(`backend.${HOSTNAME}`)"
+      - "traefik.http.routers.backend-https.tls.certResolver=letsencrypt"
+
+volumes:
+  mongo-db:
+  mongo-configdb:
