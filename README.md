@@ -1,6 +1,6 @@
 # Hutbee
 
-<img src="images/hutbee.png" alt="drawing" width="200" align="right"/>
+<img src="https://user-images.githubusercontent.com/1587877/67436463-bb01f500-f5ee-11e9-88c3-06f1800041b3.png" alt="drawing" width="200" align="right"/>
 
 This project is a solution for remotely controlling and monitoring a hut.
 
