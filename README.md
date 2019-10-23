@@ -17,11 +17,11 @@ of `docker` and `docker-compose` installed.
    vim .env
    ```
    
-2. Create an `acme.json` file and set the mode to `600`:
+2. Create a file `traefik/acme.json` and set the mode to `600`:
    
    ```
-   touch acme.json
-   chmod 600 acme.json
+   touch traefik/acme.json
+   chmod 600 traefik/acme.json
    ```
    
 3. Start the service with:
