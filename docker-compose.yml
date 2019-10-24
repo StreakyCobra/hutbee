@@ -23,7 +23,9 @@ services:
     command: '--wiredTigerCacheSizeGB 1.0'
 
   frontend:
-    image: httpd:2.4
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile.frontend
     restart: always
     labels:
       - "traefik.enable=true"
