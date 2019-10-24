@@ -18,6 +18,9 @@ services:
     volumes:
       - mongo-db:/data/db
       - mongo-configdb:/data/configdb
+    environment:
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
     mem_limit: 1g
     mem_reservation: 1g
     command: '--wiredTigerCacheSizeGB 1.0'
