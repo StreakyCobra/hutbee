@@ -1,0 +1,4 @@
+-r requirements.txt
+
+ptvsd~=4.3
+pip-tools~=4.2
