@@ -19,16 +19,16 @@ services:
       - mongo-db:/data/db
       - mongo-configdb:/data/configdb
     environment:
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - "MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}"
+      - "MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}"
     mem_limit: 1g
     mem_reservation: 1g
-    command: '--wiredTigerCacheSizeGB 1.0'
+    command: "--wiredTigerCacheSizeGB 1.0"
 
   frontend:
     build:
       context: .
-      dockerfile: dockerfiles/Dockerfile.frontend
+      dockerfile: containers/frontend/Dockerfile
     restart: always
     labels:
       - "traefik.enable=true"
@@ -41,8 +41,14 @@ services:
       - "traefik.http.routers.frontend-https.tls.certResolver=letsencrypt"
 
   backend:
-    image: httpd:2.4
+    build:
+      context: .
+      dockerfile: containers/backend/Dockerfile
     restart: always
+    environment:
+      - "HUTBEE_PRODUCTION=set"
+      - 'MONGO_PASSWORD'
+      - "MONGO_USERNAME"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"
