@@ -1,4 +1,20 @@
 -r requirements.txt
 
-ptvsd~=4.3
-pip-tools~=4.2
+autoflake
+autopep8
+black
+flake8
+ipdb
+ipython
+isort
+mypy
+pep257
+pip-tools
+pre-commit
+ptvsd
+pydocstyle
+pylint
+rope
+safety
+watchdog
+yapf
