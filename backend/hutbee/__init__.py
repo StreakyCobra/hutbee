@@ -15,7 +15,7 @@ from hutbee import api
 if not os.environ.get("HUTBEE_PRODUCTION"):
     from dotenv import load_dotenv
 
-    load_dotenv(dotenv_path=Path("../../.env"))
+    load_dotenv()
 
 
 # Setup Flask
