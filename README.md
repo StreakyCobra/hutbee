@@ -59,6 +59,7 @@ installation of `python>=3.7` and recent version of `npm/node.js`.
 
    ```
    cd backend
+   pip install -e .
    python -m hutbee
    ```
 

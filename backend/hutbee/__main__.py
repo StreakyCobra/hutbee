@@ -15,11 +15,6 @@ def main():
     # Debug is enabled by default except in production mode
     debug = not os.environ.get("HUTBEE_PRODUCTION", False)
 
-    if debug:
-        # Workaround for the werkzeug reloader removing the current directory
-        # from the path. It's nasty, but it works! Inspired by:
-        # https://github.com/mitsuhiko/flask/issues/1246
-        os.environ["PYTHONPATH"] = os.getcwd()
 
         # Enable Visual Studio Code remote debugging when in debug mode
         if "WERKZEUG_RUN_MAIN" in os.environ:
