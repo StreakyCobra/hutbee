@@ -16,11 +16,11 @@ services:
 
   frontend:
     build:
-      context: .
+      context: ./
       dockerfile: containers/frontend/Dockerfile
+      args:
+        VUE_APP_API_ROOT:
     restart: always
-    environment:
-      - "VUE_APP_API_ROOT"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-http.entrypoints=http"
@@ -33,7 +33,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: ./
       dockerfile: containers/backend/Dockerfile
     restart: always
     environment:
