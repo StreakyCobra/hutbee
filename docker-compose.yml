@@ -38,6 +38,9 @@ services:
     restart: always
     environment:
       - "HUTBEE_PRODUCTION=set"
+      - "MONGO_DB"
+      - "MONGO_HOST"
+      - "MONGO_PORT"
       - "MONGO_PASSWORD"
       - "MONGO_USERNAME"
     labels:

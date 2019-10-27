@@ -6,7 +6,8 @@
             "type": "python",
             "request": "attach",
             "port": 5678,
-            "host":"localhost"
+            "host":"localhost",
+            "justMyCode": false,
         }
     ]
 }

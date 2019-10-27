@@ -4,12 +4,6 @@
 """Hutbee backend."""
 
 import os
-from pathlib import Path
-
-from flask import Flask
-
-from flask_cors import CORS
-from hutbee import api
 
 # Load `.env` file first to avoid missing env variable on import
 if not os.environ.get("HUTBEE_PRODUCTION"):
@@ -17,6 +11,11 @@ if not os.environ.get("HUTBEE_PRODUCTION"):
 
     load_dotenv()
 
+from flask import Flask
+from flask_cors import CORS
+from logzero import logger
+
+from hutbee import api
 
 # Setup Flask
 APP = Flask(__name__)

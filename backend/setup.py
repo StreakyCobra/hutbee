@@ -10,5 +10,12 @@ setup(
     author_email="fabien.dubosson@gmail.com",
     url="https://github.com/StreakyCobra/hutbee",
     packages=find_packages(),
-    install_requires=["flask-cors~=3.0", "flask~=1.1", "python-dotenv~=0.10"],
+    install_requires=[
+        "apscheduler~=3.6",
+        "flask-cors~=3.0",
+        "flask~=1.1",
+        "logzero~=1.5",
+        "pymongo~=3.9",
+        "python-dotenv~=0.10",
+    ],
 )
