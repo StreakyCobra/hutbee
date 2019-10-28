@@ -1,51 +1,36 @@
 # -*- coding: utf-8 -*-
 """Hutbee API."""
 
-from datetime import datetime, timedelta
+from flask import Blueprint, request
 
-from flask import Blueprint, escape, jsonify, request
-
-from hutbee import schedulers
-from hutbee.db import DB
+from hutbee import auth
+from hutbee.auth import authenticated
 
 BP: Blueprint = Blueprint("api", __name__)
 
 
-def do_job():
-    print("JOB DONE!")
+@BP.route("/auth/login", methods=["POST"])
+def auth_login():
+    """Perform a user login and return the authenticaton token."""
+    data = request.form
+    token = auth.authenticate(data["username"], data["password"])
+    if not token:
+        return {"error": "Wrong credentials"}, 400
+    return {"access_token": token}
 
 
-@BP.route("/")
-def hello():
-    """Hello world endpoint."""
-    name = request.args.get("name", "World")
-    return f"Hello, {escape(name)}!"
+@BP.route("/auth/register", methods=["POST"])
+def auth_register():
+    """Register a new user."""
+    data = request.form
+    registered = auth.register(data["username"], data["password"])
+    if not registered:
+        return {"error": "Can not register the user"}, 400
+    return {"msg": "User succesfully registered"}
 
 
-@BP.route("/healthchecks")
-def list_healthchecks():
-    """List healthchecks in DB."""
-    job = DB["healthchecks"].find({})
-    return jsonify([j["time"] for j in job])
-
-
-@BP.route("/healthchecks/add")
-def add_healthchecks():
-    """Add a healthcheck."""
-    schedulers.trigger_healthcheck()
-    return "New healthcheck triggered"
-
-
-@BP.route("/jobs/add")
-def add_job():
-    """Add a job."""
-    later = datetime.now() + timedelta(seconds=10)
-    schedulers.schedule_job(do_job, "date", run_date=later)
-    return "Job will run at " + str(later)
-
-
-@BP.route("/jobs")
-def list_jobs():
-    """List jobs stored in DB."""
-    jobs = list(DB["jobs"].find({}))
-    return str(len(jobs))
+@BP.route("/me")
+@authenticated
+def username():
+    """Return username."""
+    return request.user
