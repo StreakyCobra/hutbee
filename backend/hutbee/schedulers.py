@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=global-statement
 """Hutbee schedulers."""
 
 import atexit
@@ -15,70 +14,90 @@ from hutbee.db import DB, DB_CLIENT
 
 try:
     import uwsgi
+
+    UWSGI = True
 except ImportError:
-    pass
-
-HEALTHCHECK_WORKER = None
-JOBS_WORKER = None
+    UWSGI = False
 
 
-def healthcheck_worker(uwsgi_mule=True):
-    """Run the healthchecks worker."""
-    sched = BackgroundScheduler()
-    atexit.register(sched.shutdown)
-    sched.start()
+class HealthcheckWorker:
+    """A healthcheck worker."""
 
+    def __init__(self):
+        """Initialise the worker."""
+        self.scheduler = None
+
+    @staticmethod
     def healthcheck():
         """Do a healthcheck."""
         DB["healthchecks"].insert_one({"time": random.randint(0, 100)})
         logger.info("Healthcheck")
 
-    sched.add_job(healthcheck, "interval", seconds=10)
+    def trigger_healthcheck(self):
+        """Trigger a healtcheck."""
+        if UWSGI:
+            message = {"func": HealthcheckWorker.healthcheck, "trigger": "date"}
+            uwsgi.mule_msg(pickle.dumps(message), 1)
+        else:
+            self.scheduler.add_job(HealthcheckWorker.healthcheck, "date")
 
-    if not uwsgi_mule:
-        global HEALTHCHECK_WORKER
-        HEALTHCHECK_WORKER = sched
-        return
+    def run(self):
+        """Start the worker."""
+        self.scheduler = BackgroundScheduler()
+        atexit.register(self.scheduler.shutdown)
+        self.scheduler.start()
+
+        self.scheduler.add_job(HealthcheckWorker.healthcheck, "interval", seconds=10)
+
+
+class JobsWorker:
+    """A job worker."""
+
+    def __init__(self):
+        """Initialise the worker."""
+        self.scheduler = None
+
+    def schedule_job(self, func, trigger, **kwargs):
+        """Schedule a job."""
+        if UWSGI:
+            message = {"func": func, "trigger": trigger, "kwargs": kwargs}
+            uwsgi.mule_msg(pickle.dumps(message), 2)
+        else:
+            self.scheduler.add_job(func, trigger, **kwargs)
+
+    def run(self):
+        """Start the worker."""
+        self.jobstores = {
+            "default": MongoDBJobStore(
+                database=config.MONGO_DB_NAME,
+                collection=config.JOBS_COL,
+                client=DB_CLIENT,
+            )
+        }
+        self.scheduler = BackgroundScheduler(jobstores=self.jobstores)
+        atexit.register(self.scheduler.shutdown)
+        self.scheduler.start()
+
+
+HEALTHCHECK_WORKER = HealthcheckWorker()
+JOBS_WORKER = JobsWorker()
+
+
+def uwsgi_run_healtcheck_worker():
+    """Run healtcheck worker from uwsgi."""
+    HEALTHCHECK_WORKER.run()
 
     while True:
         message = pickle.loads(uwsgi.mule_get_msg())
-        sched.add_job(message["func"], message["trigger"])
+        HEALTHCHECK_WORKER.scheduler.add_job(message["func"], message["trigger"])
 
 
-def jobs_worker(uwsgi_mule=True):
-    """Run the jobs scheduler."""
-    jobstores = {
-        "default": MongoDBJobStore(
-            database=config.MONGO_DB_NAME, collection=config.JOBS_COL, client=DB_CLIENT
+def uwsgi_run_job_worker():
+    """Run job worker from uwsgi."""
+    JOBS_WORKER.run()
+
+    while True:
+        message = pickle.loads(uwsgi.mule_get_msg())
+        JOBS_WORKER.scheduler.add_job(
+            message["func"], message["trigger"], **message["kwargs"]
         )
-    }
-    sched = BackgroundScheduler(jobstores=jobstores)
-    atexit.register(sched.shutdown)
-    sched.start()
-
-    if not uwsgi_mule:
-        global JOBS_WORKER
-        JOBS_WORKER = sched
-        return
-
-    while True:
-        message = pickle.loads(uwsgi.mule_get_msg())
-        sched.add_job(message["func"], message["trigger"], **message["kwargs"])
-
-
-def trigger_healthcheck():
-    """Trigger a healtcheck."""
-    if HEALTHCHECK_WORKER is not None:
-        HEALTHCHECK_WORKER.add_job(healthcheck, "date")
-    else:
-        message = {"func": healthcheck, "trigger": "date"}
-        uwsgi.mule_msg(pickle.dumps(message), 1)
-
-
-def schedule_job(func, trigger, **kwargs):
-    """Schedule a job."""
-    if JOBS_WORKER is not None:
-        JOBS_WORKER.add_job(func, trigger, **kwargs)
-    else:
-        message = {"func": func, "trigger": trigger, "kwargs": kwargs}
-        uwsgi.mule_msg(pickle.dumps(message), 2)

@@ -37,12 +37,13 @@ services:
       dockerfile: containers/backend/Dockerfile
     restart: always
     environment:
-      - "HUTBEE_PRODUCTION=set"
-      - "MONGO_DB"
+      - "HUTBEE_PRODUCTION=true"
+      - "MONGO_DB_NAME"
       - "MONGO_HOST"
       - "MONGO_PORT"
       - "MONGO_PASSWORD"
       - "MONGO_USERNAME"
+      - "JWT_SECRET_KEY"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"

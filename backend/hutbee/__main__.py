@@ -22,8 +22,8 @@ def main():
     if config.DEBUG and "WERKZEUG_RUN_MAIN" in os.environ:
         from hutbee import schedulers
 
-        schedulers.healthcheck_worker(uwsgi_mule=False)
-        schedulers.jobs_worker(uwsgi_mule=False)
+        schedulers.HEALTHCHECK_WORKER.run()
+        schedulers.JOBS_WORKER.run()
 
     # Run Flask
     APP.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
