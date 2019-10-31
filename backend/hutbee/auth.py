@@ -3,8 +3,8 @@
 
 from typing import Optional
 
-import pymongo
 import bcrypt
+import pymongo
 from decorator import decorator
 from flask import request
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
