@@ -28,7 +28,7 @@ def healthcheck():
 
 
 def healthcheck_worker(uwsgi_mule=True):
-    """Run healthcheck tests."""
+    """Run the healthchecks worker."""
     sched = BackgroundScheduler()
     atexit.register(sched.shutdown)
     sched.start()
