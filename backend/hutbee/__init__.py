@@ -3,7 +3,7 @@
 # flake8: noqa
 """Hutbee backend."""
 
-from hutbee import config  # Imported first to avoid missing env. variables
+from hutbee import config  # Imported first to load environment variables
 
 import os
 
