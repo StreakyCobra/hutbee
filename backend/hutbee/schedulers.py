@@ -10,7 +10,8 @@ from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 from logzero import logger
 
-from hutbee.db import DB, DB_CLIENT, DB_NAME
+from hutbee import config
+from hutbee.db import DB, DB_CLIENT
 
 try:
     import uwsgi
@@ -21,17 +22,16 @@ HEALTHCHECK_WORKER = None
 JOBS_WORKER = None
 
 
-def healthcheck():
-    """Do a healthcheck."""
-    DB["healthchecks"].insert_one({"time": random.randint(0, 100)})
-    logger.info("Healthcheck")
-
-
 def healthcheck_worker(uwsgi_mule=True):
     """Run the healthchecks worker."""
     sched = BackgroundScheduler()
     atexit.register(sched.shutdown)
     sched.start()
+
+    def healthcheck():
+        """Do a healthcheck."""
+        DB["healthchecks"].insert_one({"time": random.randint(0, 100)})
+        logger.info("Healthcheck")
 
     sched.add_job(healthcheck, "interval", seconds=10)
 
@@ -49,7 +49,7 @@ def jobs_worker(uwsgi_mule=True):
     """Run the jobs scheduler."""
     jobstores = {
         "default": MongoDBJobStore(
-            database=DB_NAME, collection="jobs", client=DB_CLIENT
+            database=config.MONGO_DB_NAME, collection=config.JOBS_COL, client=DB_CLIENT
         )
     }
     sched = BackgroundScheduler(jobstores=jobstores)

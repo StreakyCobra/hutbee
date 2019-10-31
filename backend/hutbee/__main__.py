@@ -26,7 +26,7 @@ def main():
         schedulers.jobs_worker(uwsgi_mule=False)
 
     # Run Flask
-    APP.run(host="0.0.0.0", port=8000, debug=config.DEBUG)
+    APP.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
 
 
 if __name__ == "__main__":
