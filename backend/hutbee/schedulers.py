@@ -34,7 +34,7 @@ class HealthcheckWorker:
         logger.info("Healthcheck")
 
     def trigger_healthcheck(self):
-        """Trigger a healtcheck."""
+        """Trigger a healthcheck."""
         if UWSGI:
             message = {"func": HealthcheckWorker.healthcheck, "trigger": "date"}
             uwsgi.mule_msg(pickle.dumps(message), 1)
@@ -67,14 +67,14 @@ class JobsWorker:
 
     def run(self):
         """Start the worker."""
-        self.jobstores = {
+        jobstores = {
             "default": MongoDBJobStore(
                 database=config.MONGO_DB_NAME,
                 collection=config.JOBS_COL,
                 client=DB_CLIENT,
             )
         }
-        self.scheduler = BackgroundScheduler(jobstores=self.jobstores)
+        self.scheduler = BackgroundScheduler(jobstores=jobstores)
         atexit.register(self.scheduler.shutdown)
         self.scheduler.start()
 
@@ -83,8 +83,8 @@ HEALTHCHECK_WORKER = HealthcheckWorker()
 JOBS_WORKER = JobsWorker()
 
 
-def uwsgi_run_healtcheck_worker():
-    """Run healtcheck worker from uwsgi."""
+def uwsgi_run_healthcheck_worker():
+    """Run healthcheck worker from uwsgi."""
     HEALTHCHECK_WORKER.run()
 
     while True:

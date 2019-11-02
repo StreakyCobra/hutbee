@@ -5,6 +5,7 @@ from typing import Optional
 
 import bcrypt
 import pymongo
+from pymongo.errors import DuplicateKeyError
 from decorator import decorator
 from flask import request
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
@@ -28,7 +29,7 @@ def register(username: str, password: str) -> bool:
     password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
     try:
         DB[USERS_COL].insert_one({"username": username, "password": password})
-    except pymongo.errors.DuplicateKeyError:
+    except DuplicateKeyError:
         return False
     return True
 

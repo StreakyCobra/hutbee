@@ -11,7 +11,7 @@ BP: Blueprint = Blueprint("api", __name__)
 
 @BP.route("/auth/login", methods=["POST"])
 def auth_login():
-    """Perform a user login and return the authenticaton token."""
+    """Perform a user login and return the authentication token."""
     data = request.form
     token = auth.authenticate(data["username"], data["password"])
     if not token:
@@ -26,7 +26,7 @@ def auth_register():
     registered = auth.register(data["username"], data["password"])
     if not registered:
         return {"error": "Can not register the user"}, 400
-    return {"msg": "User succesfully registered"}
+    return {"msg": "User successfully registered"}
 
 
 @BP.route("/me")
