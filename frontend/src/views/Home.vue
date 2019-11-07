@@ -1,42 +1,31 @@
 <template>
-  <div>
-    <h1>Welcome</h1>
-    <p>What is your name?</p>
-    <input v-model="name" type="text" />
-    <div>Answer from the API: {{answer}}</div>
-  </div>
+    <div>
+        <h1>Welcome</h1>
+        <p>Hi, {{ username }}</p>
+        <input type="button" value="Logout" @click="logout"/>
+    </div>
 </template>
 
 
 <script lang="ts">
-import { Component, Watch, Vue } from "vue-property-decorator";
+    import {Component, Vue} from "vue-property-decorator";
+    import * as auth from "@/lib/auth"
 
-@Component
-export default class Hello extends Vue {
-  name: string = ""
-  answer: string = ""
+    @Component
+    export default class Hello extends Vue {
+        username: string = "";
 
-  mounted() {
-    this.call_api(this.name);
-  }
+        mounted() {
+            this.$http.get('me').then(response => {
+                response.text().then(data => {
+                    this.username = data;
+                });
+            })
+        }
 
-  @Watch("name")
-  onPropertyChanged(value: string, oldValue:string) {
-    this.call_api(value);
-  }
-
-  call_api(value: string) {
-    var url = ""
-    if (value) {
-      url += '?name=' + this.name
+        logout() {
+            auth.logout();
+            this.$router.push({"name": "auth"});
+        }
     }
-    this.$http.get(url).then(response => {
-        return response.text();
-      }, response => {
-        this.answer = "error";
-      }).then(response => {
-        this.answer = response || "API call failed"
-      });
-      }
-}
 </script>
