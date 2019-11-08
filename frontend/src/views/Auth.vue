@@ -26,7 +26,6 @@ export default class Auth extends Vue {
       .then(
         response => {
           response.json().then((data: { [x: string]: string }) => {
-            console.log("Authentication successful");
             auth.login(data);
             this.$router.push({ name: "home" });
           });
@@ -34,7 +33,6 @@ export default class Auth extends Vue {
         response => {
           this.username = "";
           this.password = "";
-          console.log("Authentication error");
         }
       );
   }

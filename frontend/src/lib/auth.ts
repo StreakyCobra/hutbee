@@ -29,7 +29,6 @@ export function refresh(http: any, onConnected: any, onDisconnected: any) {
   http.post("auth/refresh").then(
     (response: any) => {
       response.json().then((data: { [x: string]: string }) => {
-        console.log("Refresh successful");
         localStorage.setItem("access_token", data["access_token"]);
         onConnected();
       });

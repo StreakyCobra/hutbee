@@ -16,9 +16,7 @@ export default class Hello extends Vue {
 
   mounted() {
     this.$http.get("me").then(response => {
-      response.text().then((data: string) => {
-        this.username = data;
-      });
+      this.username = response.text();
     });
   }
 
