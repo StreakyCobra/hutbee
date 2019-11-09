@@ -5,7 +5,8 @@
 
 import os
 
-from hutbee import api, config
+from hutbee import config
+from hutbee.api import APP
 
 
 def main():
@@ -25,7 +26,7 @@ def main():
         jobs.JobsWorker.run()
 
     # Run Flask
-    api.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
+    APP.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
 
 
 if __name__ == "__main__":
