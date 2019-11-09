@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Hutbee API."""
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 
 from hutbee import auth
 from hutbee.auth import authenticated, with_refresh_token
@@ -29,7 +29,7 @@ def auth_login():
 @with_refresh_token
 def auth_refresh():
     """Refresh an authentication token."""
-    token = auth.create_token_pair(request.user["username"])
+    token = auth.create_token_pair(request.user.username)
     return {"access_token": token.access}
 
 
