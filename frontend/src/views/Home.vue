@@ -28,7 +28,7 @@ export default class Hello extends Vue {
   }
 
   notify() {
-      this.$http.get("auth/notify").then(x => {console.log(x);});
+    this.$http.get("auth/notify");
   }
 }
 </script>
