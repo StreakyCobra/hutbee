@@ -29,7 +29,7 @@ def auth_login():
 @with_refresh_token
 def auth_refresh():
     """Refresh an authentication token."""
-    token = auth.create_token_pair(request.user.username)
+    token = auth.create_token_pair(request.user)
     return {"access_token": token.access}
 
 
