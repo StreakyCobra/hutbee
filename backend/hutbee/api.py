@@ -18,9 +18,10 @@ def handle_invalid_usage(error):
 def auth_login():
     """Perform a user login and return the authentication token."""
     data = request.json
-    token = auth.authenticate(data["username"], data["password"])
-    if not token:
+    user = auth.authenticate(data["username"], data["password"])
+    if user is None:
         return {"error": "Wrong credentials"}, 400
+    token = auth.create_token_pair(user)
     return {"access_token": token.access, "refresh_token": token.refresh}
 
 
@@ -28,7 +29,7 @@ def auth_login():
 @with_refresh_token
 def auth_refresh():
     """Refresh an authentication token."""
-    token = auth.create_token_pair(request.user)
+    token = auth.create_token_pair(request.user["username"])
     return {"access_token": token.access}
 
 
@@ -36,7 +37,7 @@ def auth_refresh():
 @authenticated
 def username():
     """Return username."""
-    return request.user.get("username")
+    return request.user.username
 
 
 @BP.route("/auth/register", methods=["POST"])
