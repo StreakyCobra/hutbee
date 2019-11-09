@@ -4,6 +4,7 @@
 import atexit
 import pickle
 
+from apscheduler import events
 from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 from logzero import logger
@@ -30,7 +31,12 @@ class JobsWorker:
     """A job worker."""
 
     @staticmethod
-    def schedule_job(self, func, trigger, **kwargs):
+    def job_missed_listener(event):
+        # TODO Notify about missed jobs
+        logger.warn("A job have been missed")
+
+    @staticmethod
+    def schedule_job(func, trigger, **kwargs):
         """Schedule a job."""
         if UWSGI:
             message = {"func": func, "trigger": trigger, "kwargs": kwargs}
@@ -42,6 +48,7 @@ class JobsWorker:
     @staticmethod
     def run():
         """Start the worker."""
+        SCHEDULER.add_listener(JobsWorker.job_missed_listener, events.EVENT_JOB_MISSED)
         atexit.register(SCHEDULER.shutdown)
         SCHEDULER.start()
 
