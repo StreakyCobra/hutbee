@@ -38,14 +38,3 @@ def auth_refresh():
 def username():
     """Return username."""
     return request.user.username
-
-
-@BP.route("/auth/register", methods=["POST"])
-@authenticated
-def auth_register():
-    """Register a new user."""
-    data = request.form
-    registered = auth.register(data["username"], data["password"])
-    if not registered:
-        return {"error": "Can not register the user"}, 400
-    return {"msg": "User successfully registered"}
