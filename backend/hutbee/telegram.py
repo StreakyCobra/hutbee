@@ -56,7 +56,7 @@ def error(update, context):
 
 def run_worker():
     """Start the bot."""
-    atexit.register(Updater.stop())
+    atexit.register(Updater.stop)
     dp = UPDATER.dispatcher
 
     # on different commands - answer in Telegram
