@@ -18,12 +18,13 @@ def main():
         ptvsd.enable_attach()
 
     # In debug mode take care of running the scheduler jobs. In production mode
-    # this is managed by uwsgi.
+    # this is managed with uwsgi mules.
     if config.DEBUG and "WERKZEUG_RUN_MAIN" in os.environ:
-        from hutbee import healthchecks, jobs
+        from hutbee import healthchecks, jobs, telegram
 
-        healthchecks.HealthcheckWorker.run()
-        jobs.JobsWorker.run()
+        healthchecks.run_worker()
+        jobs.run_worker()
+        telegram.run_worker()
 
     # Run Flask
     APP.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)

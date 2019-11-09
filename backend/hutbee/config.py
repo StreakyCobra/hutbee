@@ -72,9 +72,18 @@ JOBS_COL = "jobs"
 HEALTHCHECKS_COL = "healthchecks"
 """Name of the healthchecks collection in the database."""
 
+
 # --------------------------------------------------------------------------- #
 # AUTHENTICATION                                                              #
 # --------------------------------------------------------------------------- #
 
 JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
 """Secret key to sign JWTs."""
+
+
+# --------------------------------------------------------------------------- #
+# TELEGRAM                                                                    #
+# --------------------------------------------------------------------------- #
+
+TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+"""Token of the telegram bot."""

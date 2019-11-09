@@ -20,5 +20,6 @@ setup(
         "logzero~=1.5",
         "pymongo~=3.9",
         "python-dotenv~=0.10",
+        "python-telegram-bot~=12.2",
     ],
 )
