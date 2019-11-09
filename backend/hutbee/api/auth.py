@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hutbee API."""
+"""Hutbee authentication API."""
 
 from flask import Blueprint, request
 

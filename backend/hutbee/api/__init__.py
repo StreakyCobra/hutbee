@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Hutbee backend."""
+"""Hutbee API."""
 
 from flask import Flask
 from flask_cors import CORS

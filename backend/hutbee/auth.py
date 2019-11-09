@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Hutbee authentication."""
-import collections
+
 from dataclasses import dataclass
 from typing import Dict, Optional
 
