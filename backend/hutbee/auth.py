@@ -6,6 +6,7 @@ from typing import Dict, Optional
 
 from decorator import decorator
 from flask import request
+from hutbee.domain.user import User
 from pymongo.errors import DuplicateKeyError
 
 import bcrypt
@@ -13,17 +14,6 @@ import flask_jwt_extended as jwt
 from hutbee.config import USERS_COL
 from hutbee.db import DB
 from logzero import logger
-
-
-@dataclass
-class User:
-    """A user of hutbee."""
-
-    username: str
-
-    @staticmethod
-    def of(data: Dict):
-        return User(username=data["username"])
 
 
 @dataclass

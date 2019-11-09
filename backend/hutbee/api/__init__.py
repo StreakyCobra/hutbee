@@ -17,4 +17,4 @@ JWTManager(APP)
 CORS(APP)
 
 # Register blueprints
-APP.register_blueprint(auth.BP)
+APP.register_blueprint(auth.BP, url_prefix="/auth")
