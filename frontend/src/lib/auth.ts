@@ -6,7 +6,7 @@ export function isConnected(http: any, onConnected: any, onDisconnected: any) {
   (Vue as any).http.headers.common["Authorization"] = token;
 
   // Look if the access token is still valid
-  http.get("me").then(
+  http.get("auth/me").then(
     (response: any) => {
       onConnected(response);
     },
