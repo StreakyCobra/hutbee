@@ -20,10 +20,10 @@ def main():
     # In debug mode take care of running the scheduler jobs. In production mode
     # this is managed by uwsgi.
     if config.DEBUG and "WERKZEUG_RUN_MAIN" in os.environ:
-        from hutbee import schedulers
+        from hutbee import healthchecks, jobs
 
-        schedulers.HEALTHCHECK_WORKER.run()
-        schedulers.JOBS_WORKER.run()
+        healthchecks.HealthcheckWorker.run()
+        jobs.JobsWorker.run()
 
     # Run Flask
     APP.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)

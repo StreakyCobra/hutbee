@@ -69,6 +69,8 @@ USERS_COL = "users"
 JOBS_COL = "jobs"
 """Name of the jobs collection in the database."""
 
+HEALTHCHECKS_COL = "healthchecks"
+"""Name of the healthchecks collection in the database."""
 
 # --------------------------------------------------------------------------- #
 # AUTHENTICATION                                                              #
