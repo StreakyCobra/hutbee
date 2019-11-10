@@ -11,6 +11,7 @@ COPY keys/id_rsa /root/.ssh/id_rsa
 
 # Run autossh for a permanent connection with hutbee
 CMD /usr/bin/autossh \
+  -o ExitOnForwardFailure=yes \
   -o ServerAliveInterval=30 \
   -o ServerAliveCountMax=3 \
   -o StrictHostKeyChecking=no \
