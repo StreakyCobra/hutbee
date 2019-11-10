@@ -9,15 +9,18 @@ RUN apt-get update && apt-get install -y autossh \
 # Setup ssh key
 COPY keys/id_rsa /root/.ssh/id_rsa
 
+# Disable autossh connection monitoring
+ENV AUTOSSH_PORT=0
+
 # Run autossh for a permanent connection with hutbee
 CMD /usr/bin/autossh \
   -o ExitOnForwardFailure=yes \
-  -o ServerAliveInterval=30 \
+  -o ConnectTimeout=10 \
+  -o ServerAliveInterval=20 \
   -o ServerAliveCountMax=3 \
   -o StrictHostKeyChecking=no \
+  -R *:8000:controller:80 \
+  -L *:8000:backend:80 \
   -N \
-  -R 0.0.0.0:8000:controller:80 \
-  -L 0.0.0.0:8000:backend:80 \
   -p ${ENDPOINT_SSH_PORT} \
-  hutbee@${ENDPOINT_HOSTNAME} \
-  -M 0
+  ${ENDPOINT_HOSTNAME}

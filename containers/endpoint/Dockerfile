@@ -8,17 +8,17 @@ RUN apt-get update && apt-get install -y openssh-server \
 
 # Setup ssh daemon
 RUN mkdir -p /run/sshd
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 RUN sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 RUN sed -i 's/#GatewayPorts no/GatewayPorts clientspecified/' /etc/ssh/sshd_config
+RUN sed -i 's/#ClientAliveInterval 0/ClientAliveInterval 20/' /etc/ssh/sshd_config
+RUN sed -i 's/#ClientAliveCountMax 3/ClientAliveCountMax 3/' /etc/ssh/sshd_config
 
-# Setup user and ssh key
-RUN useradd -m -s /bin/bash hutbee
-COPY keys/id_rsa.pub /home/hutbee/.ssh/authorized_keys
+# Copy allowed ssh key
+COPY keys/id_rsa.pub /root/.ssh/authorized_keys
 
 # Tell traefik what port to use
 EXPOSE 8000
 
-# Start ssh in foreground
+# Start ssh server in foreground
 CMD /usr/sbin/sshd -D
