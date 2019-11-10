@@ -1,0 +1,16 @@
+version: "2.4"
+
+services:
+
+  phonehome:
+    build:
+      context: ./
+      dockerfile: containers/phonehome/Dockerfile
+    environment:
+      - "ENDPOINT_HOSTNAME"
+      - "ENDPOINT_SSH_PORT"
+    restart: always
+
+  controller:
+    image: httpd
+    restart: always

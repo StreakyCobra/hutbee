@@ -55,6 +55,23 @@ services:
       - "traefik.http.routers.backend-https.rule=Host(`${BACKEND_HOSTNAME}`)"
       - "traefik.http.routers.backend-https.tls.certResolver=letsencrypt"
 
+  endpoint:
+    build:
+      context: ./
+      dockerfile: containers/endpoint/Dockerfile
+    restart: always
+    ports:
+      - "${ENDPOINT_SSH_PORT}:22"
+    environment:
+      - "traefik.enable=true"
+      - "traefik.http.routers.controller-http.entrypoints=http"
+      - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`)"
+      - "traefik.http.routers.controller-http.middlewares=controller-redirect@docker"
+      - "traefik.http.middlewares.controller-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.controller-https.entrypoints=https"
+      - "traefik.http.routers.controller-https.rule=Host(`${CONTROLLER_HOSTNAME}`)"
+      - "traefik.http.routers.controller-https.tls.certResolver=letsencrypt"
+
   db:
     image: mongo:4
     restart: always
