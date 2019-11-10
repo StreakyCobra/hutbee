@@ -31,5 +31,8 @@ RUN chown www-data:www-data -R /app
 # Declare container parameters
 WORKDIR /app
 
+# Tell traefik what port to use
+EXPOSE 80
+
 # Define command to run
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
