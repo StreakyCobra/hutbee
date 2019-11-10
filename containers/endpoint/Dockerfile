@@ -17,8 +17,5 @@ RUN sed -i 's/#GatewayPorts no/GatewayPorts clientspecified/' /etc/ssh/sshd_conf
 RUN useradd -m -s /bin/bash hutbee
 COPY keys/id_rsa.pub /home/hutbee/.ssh/authorized_keys
 
-# Tell traefik what port to use
-EXPOSE 8000
-
 # Start ssh in foreground
 CMD /usr/sbin/sshd -D
