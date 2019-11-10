@@ -17,6 +17,7 @@ CMD /usr/bin/autossh \
   -o StrictHostKeyChecking=no \
   -N \
   -R 0.0.0.0:8000:controller:80 \
+  -L 0.0.0.0:8000:backend:80 \
   -p ${ENDPOINT_SSH_PORT} \
   hutbee@${ENDPOINT_HOSTNAME} \
   -M 0
