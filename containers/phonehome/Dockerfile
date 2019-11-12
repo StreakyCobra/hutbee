@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 # Update the distribution and install dependencies from the official repos
-RUN apt-get update && apt-get install -y autossh \
+RUN apt-get update && apt-get install -y autossh iproute2 \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /usr/share/locale/* && rm -rf /usr/share/man/* && rm -rf /usr/share/doc/*
@@ -21,6 +21,7 @@ CMD /usr/bin/autossh \
   -o StrictHostKeyChecking=no \
   -R *:8000:controller:80 \
   -L *:8000:backend:80 \
+  -R *:10022:$(/sbin/ip route|awk '/default/ { print  $3}'):22 \
   -N \
   -p ${ENDPOINT_SSH_PORT} \
   ${ENDPOINT_HOSTNAME}

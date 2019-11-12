@@ -64,6 +64,7 @@ services:
     restart: always
     ports:
       - "${ENDPOINT_SSH_PORT}:22"
+      - "${CONTROLLER_REMOTE_SSH_PORT}:10022"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.endpoint-http.entrypoints=http"
