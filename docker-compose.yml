@@ -35,7 +35,9 @@ services:
   backend:
     build:
       context: ./
-      dockerfile: containers/backend/Dockerfile
+      dockerfile: containers/python/Dockerfile
+      args:
+        MODULE: backend
     restart: always
     environment:
       - "HUTBEE_PRODUCTION=true"
