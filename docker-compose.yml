@@ -41,6 +41,7 @@ services:
     restart: always
     environment:
       - "HUTBEE_PRODUCTION=true"
+      - "CONTROLLER_HOSTNAME"
       - "MONGO_DB_NAME"
       - "MONGO_HOST"
       - "MONGO_PORT"

@@ -6,6 +6,8 @@ import pickle
 from datetime import datetime
 from typing import Any
 
+import requests
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from hutbee import config
 from hutbee.db import DB
@@ -29,8 +31,22 @@ class _Message:
 
 def _healthcheck():
     """Do a healthcheck."""
-    DB[config.HEALTHCHECKS_COL].insert_one({"time": datetime.now()})
-    logger.info("Healthcheck")
+    try:
+        response = requests.get("http://" + config.CONTROLLER_HOSTNAME)
+    except:
+        response = None
+
+    if response and response.status_code == 200:
+        status = "online"
+        temperatures = response.json()
+    else:
+        status = "offline"
+        temperatures = None
+
+    DB[config.HEALTHCHECKS_COL].insert_one(
+        {"time": datetime.now(), "status": status, "temperatures": temperatures}
+    )
+    logger.info(f"Healthcheck, status={status}")
 
 
 def _trigger_healthcheck(message: _Message):
