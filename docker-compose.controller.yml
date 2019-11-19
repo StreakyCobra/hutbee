@@ -12,5 +12,10 @@ services:
     restart: always
 
   controller:
-    image: httpd
+    build:
+      context: ./
+      dockerfile: containers/controller/Dockerfile
     restart: always
+    devices:
+      - "/dev/i2c-1"
+
