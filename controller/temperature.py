@@ -5,10 +5,12 @@
 
 import time
 
+from flask import Flask, jsonify
+
 import smbus
 
-DEVICE_BUS = 1
-
+APP = Flask(__name__)
+BUS = smbus.SMBus(1)
 TEMP_IN_ADDR = 0x18
 TEMP_OUT_ADDR = 0x19
 
@@ -23,14 +25,15 @@ def read_temperature(bus, address):
     return temp
 
 
-def main():
-    bus = smbus.SMBus(DEVICE_BUS)
+@APP.route("/")
+def get_temperature():
+    temp_in = read_temperature(BUS, TEMP_IN_ADDR)
+    temp_out = read_temperature(BUS, TEMP_OUT_ADDR)
+    return jsonify(temperature_inside=temp_in, temperature_outside=temp_out)
 
-    while True:
-        temperature_in = read_temperature(bus, TEMP_IN_ADDR)
-        temperature_out = read_temperature(bus, TEMP_OUT_ADDR)
-        print(temperature_in, temperature_out)
-        time.sleep(1)
+
+def main():
+    APP.run(host="0.0.0.0", port="8700")
 
 
 if __name__ == "__main__":
