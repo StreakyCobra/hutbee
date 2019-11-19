@@ -33,7 +33,7 @@ def get_temperature():
 
 
 def main():
-    APP.run(host="0.0.0.0", port="8700")
+    APP.run(host="0.0.0.0", port="80")
 
 
 if __name__ == "__main__":
