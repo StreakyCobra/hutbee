@@ -4,4 +4,4 @@ COPY controller/temperature.py temperature.py
 
 RUN pip install smbus
 
-CMD python temperature.py
+CMD python -u temperature.py
