@@ -62,10 +62,11 @@ services:
     build:
       context: ./
       dockerfile: containers/controller-proxy/Dockerfile
+      args:
+        CONTROLLER_PROXY_SSH_PORT: "${CONTROLLER_PROXY_SSH_PORT}"
     restart: always
     ports:
       - "${CONTROLLER_SSH_PORT}"
-      - "${CONTROLLER_PROXY_SSH_PORT}"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.controller-http.entrypoints=http"
