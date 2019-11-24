@@ -21,7 +21,7 @@ CMD /usr/bin/autossh \
   -o StrictHostKeyChecking=no \
   -R *:80:controller:80 \
   -L *:80:backend:80 \
-  -R *:${CONTROLLER_SHH_PORT}:$(/sbin/ip route|awk '/default/ { print  $3}'):${CONTROLLER_SSH_PORT} \
+  -R *:${CONTROLLER_SSH_PORT}:$(/sbin/ip route|awk '/default/ { print  $3}'):${CONTROLLER_SSH_PORT} \
   -N \
-  -p ${ENDPOINT_SSH_PORT} \
-  ${ENDPOINT_HOSTNAME}
+  -p ${CONTROLLER_PROXY_SSH_PORT} \
+  ${CONTROLLER_PROXY_HOSTNAME}

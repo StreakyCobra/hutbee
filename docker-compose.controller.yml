@@ -2,13 +2,14 @@ version: "2.4"
 
 services:
 
-  backend-proxy:
+  backend:
     build:
       context: ./
       dockerfile: containers/backend-proxy/Dockerfile
     environment:
-      - "ENDPOINT_HOSTNAME"
-      - "ENDPOINT_SSH_PORT"
+      - "CONTROLLER_SSH_PORT"
+      - "CONTROLLER_PROXY_HOSTNAME"
+      - "CONTROLLER_PROXY_SSH_PORT"
     restart: always
 
   controller:

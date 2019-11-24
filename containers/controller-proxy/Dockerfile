@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y openssh-server \
 
 # Setup ssh daemon
 RUN mkdir -p /run/sshd
+RUN sed -i 's/#Port 22/Port ${CONTROLLER_PROXY_SSH_PORT}/' /etc/ssh/sshd_config
 RUN sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 RUN sed -i 's/#GatewayPorts no/GatewayPorts clientspecified/' /etc/ssh/sshd_config
