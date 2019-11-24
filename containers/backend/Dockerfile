@@ -1,7 +1,5 @@
 FROM python:3.7
 
-ARG MODULE
-
 # Update the distribution and install dependencies from the official repos
 RUN apt-get update && apt-get install -y nginx supervisor \
     && apt-get autoclean \
@@ -21,10 +19,10 @@ COPY containers/python/supervisord.conf /etc/supervisor/conf.d/
 
 # Configure uwsgi
 RUN mkdir /etc/uwsgi/
-COPY containers/python/uwsgi_${MODULE}.ini /etc/uwsgi/uwsgi.ini
+COPY containers/python/uwsgi.ini /etc/uwsgi/uwsgi.ini
 
 # Prepare the app at build time
-COPY ${MODULE} /app
+COPY backend /app
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Fix permissions
