@@ -19,9 +19,9 @@ CMD /usr/bin/autossh \
   -o ServerAliveInterval=20 \
   -o ServerAliveCountMax=3 \
   -o StrictHostKeyChecking=no \
-  -R *:8000:controller:80 \
-  -L *:8000:backend:80 \
-  -R *:10022:$(/sbin/ip route|awk '/default/ { print  $3}'):22 \
+  -R *:80:controller:80 \
+  -L *:80:backend:80 \
+  -R *:${CONTROLLER_SHH_PORT}:$(/sbin/ip route|awk '/default/ { print  $3}'):${CONTROLLER_SSH_PORT} \
   -N \
   -p ${ENDPOINT_SSH_PORT} \
   ${ENDPOINT_HOSTNAME}

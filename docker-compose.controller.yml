@@ -2,10 +2,10 @@ version: "2.4"
 
 services:
 
-  phonehome:
+  backend-proxy:
     build:
       context: ./
-      dockerfile: containers/phonehome/Dockerfile
+      dockerfile: containers/backend-proxy/Dockerfile
     environment:
       - "ENDPOINT_HOSTNAME"
       - "ENDPOINT_SSH_PORT"

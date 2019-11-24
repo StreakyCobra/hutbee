@@ -18,7 +18,7 @@ RUN sed -i 's/#ClientAliveCountMax 3/ClientAliveCountMax 3/' /etc/ssh/sshd_confi
 COPY keys/id_rsa.pub /root/.ssh/authorized_keys
 
 # Tell traefik what port to use
-EXPOSE 8000
+EXPOSE 80
 
 # Start ssh server in foreground
 CMD /usr/sbin/sshd -D

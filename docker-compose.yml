@@ -60,24 +60,24 @@ services:
       - "traefik.http.routers.backend-https.tls.certResolver=letsencrypt"
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
 
-  endpoint:
+  controller-proxy:
     build:
       context: ./
-      dockerfile: containers/endpoint/Dockerfile
+      dockerfile: containers/controller-proxy/Dockerfile
     restart: always
     ports:
       - "${ENDPOINT_SSH_PORT}:22"
       - "${CONTROLLER_REMOTE_SSH_PORT}:10022"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.endpoint-http.entrypoints=http"
-      - "traefik.http.routers.endpoint-http.rule=Host(`${CONTROLLER_HOSTNAME}`)"
-      - "traefik.http.routers.endpoint-http.middlewares=endpoint-redirect@docker"
-      - "traefik.http.middlewares.endpoint-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.endpoint-https.entrypoints=https"
-      - "traefik.http.routers.endpoint-https.rule=Host(`${CONTROLLER_HOSTNAME}`)"
-      - "traefik.http.routers.endpoint-https.tls.certResolver=letsencrypt"
-      - "traefik.http.services.endpoint-https.loadbalancer.server.port=8000"
+      - "traefik.http.routers.controller-http.entrypoints=http"
+      - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`)"
+      - "traefik.http.routers.controller-http.middlewares=controller-redirect@docker"
+      - "traefik.http.middlewares.controller-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.controller-https.entrypoints=https"
+      - "traefik.http.routers.controller-https.rule=Host(`${CONTROLLER_HOSTNAME}`)"
+      - "traefik.http.routers.controller-https.tls.certResolver=letsencrypt"
+      - "traefik.http.services.controller-https.loadbalancer.server.port=80"
 
   db:
     image: mongo:4
