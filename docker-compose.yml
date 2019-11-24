@@ -66,7 +66,8 @@ services:
         CONTROLLER_PROXY_SSH_PORT: "${CONTROLLER_PROXY_SSH_PORT}"
     restart: always
     ports:
-      - "${CONTROLLER_SSH_PORT}"
+      - "${CONTROLLER_PROXY_SSH_PORT}:${CONTROLLER_PROXY_SSH_PORT}"
+      - "${CONTROLLER_SSH_PORT}:${CONTROLLER_SSH_PORT}"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.controller-http.entrypoints=http"
