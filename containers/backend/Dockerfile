@@ -10,16 +10,16 @@ RUN apt-get update && apt-get install -y nginx supervisor \
 RUN pip install uwsgi
 
 # Configure nginx
-COPY containers/python/nginx.conf /etc/nginx/sites-enabled/default
+COPY containers/backend/nginx.conf /etc/nginx/sites-enabled/default
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Configure supervisor
-COPY containers/python/supervisord.conf /etc/supervisor/conf.d/
+COPY containers/backend/supervisord.conf /etc/supervisor/conf.d/
 
 # Configure uwsgi
 RUN mkdir /etc/uwsgi/
-COPY containers/python/uwsgi.ini /etc/uwsgi/uwsgi.ini
+COPY containers/backend/uwsgi.ini /etc/uwsgi/uwsgi.ini
 
 # Prepare the app at build time
 COPY backend /app
