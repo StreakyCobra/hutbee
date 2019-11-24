@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y openssh-server \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /usr/share/locale/* && rm -rf /usr/share/man/* && rm -rf /usr/share/doc/*
 
+ARG CONTROLLER_PROXY_SSH_PORT
+
 # Setup ssh daemon
 RUN mkdir -p /run/sshd
 RUN sed -i 's/#Port 22/Port ${CONTROLLER_PROXY_SSH_PORT}/' /etc/ssh/sshd_config
