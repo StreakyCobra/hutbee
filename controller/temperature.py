@@ -62,7 +62,7 @@ def store_temperature():
 
 def main():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(store_temperature, "interval", seconds=1)
+    scheduler.add_job(store_temperature, "interval", seconds=60)
     scheduler.start()
     APP.run(host="0.0.0.0", port="80")
 
