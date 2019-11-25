@@ -1,7 +1,7 @@
 FROM python:3.7
 
-COPY controller/temperature.py temperature.py
-
-RUN pip install smbus flask
+COPY controller /app
+WORKDIR /app
+RUN pip install -r requirements.txt
 
 CMD python -u temperature.py

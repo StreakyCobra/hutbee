@@ -6,17 +6,19 @@ services:
     build:
       context: ./
       dockerfile: containers/backend-proxy/Dockerfile
+    restart: always
     environment:
       - "CONTROLLER_SSH_PORT"
       - "CONTROLLER_PROXY_HOSTNAME"
       - "CONTROLLER_PROXY_SSH_PORT"
-    restart: always
 
   controller:
     build:
       context: ./
       dockerfile: containers/controller/Dockerfile
     restart: always
+    volumes:
+      - "/usr/share/hutbee/temperatures.csv:/app/temperatures.csv"
     devices:
       - "/dev/i2c-1"
 
