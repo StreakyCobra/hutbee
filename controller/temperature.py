@@ -21,8 +21,8 @@ except FileNotFoundError:
     FAKE = True
 
 APP = Flask(__name__)
-TEMP_IN_ADDR = 0x18
-TEMP_OUT_ADDR = 0x19
+TEMP_IN_ADDR = 0x1b
+TEMP_OUT_ADDR = 0x18
 
 
 def read_temperature(bus, address):
