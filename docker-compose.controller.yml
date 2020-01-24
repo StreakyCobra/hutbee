@@ -25,7 +25,7 @@ services:
   connectivity-manager:
     build:
       context: ./
-      dockerfile: container/connectivity-manager/Dockerfile
+      dockerfile: containers/connectivity-manager/Dockerfile
     restart: always
     environment:
       - "BACKEND_HOSTNAME"
