@@ -5,7 +5,7 @@ services:
   backend:
     build:
       context: ./
-      dockerfile: containers/backend-proxy/Dockerfile
+      dockerfile: containers/controller-proxy/Dockerfile
     restart: always
     environment:
       - "CONTROLLER_SSH_PORT"
@@ -22,10 +22,10 @@ services:
     devices:
       - "/dev/i2c-1"
 
-  connectivity-manager:
+  controller-wifi:
     build:
       context: ./
-      dockerfile: containers/connectivity-manager/Dockerfile
+      dockerfile: containers/controller-wifi/Dockerfile
     restart: always
     environment:
       - "BACKEND_HOSTNAME"

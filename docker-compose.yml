@@ -61,7 +61,7 @@ services:
   controller:
     build:
       context: ./
-      dockerfile: containers/controller-proxy/Dockerfile
+      dockerfile: containers/backend-proxy/Dockerfile
       args:
         CONTROLLER_PROXY_SSH_PORT: "${CONTROLLER_PROXY_SSH_PORT}"
     restart: always
