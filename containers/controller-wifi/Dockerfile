@@ -9,7 +9,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /usr/share/locale/* /usr/share/man/* /usr/share/doc/*
 
-COPY wifi-watchdog.sh /usr/local/bin/wifi-watchdog.sh
+COPY containers/controller-wifi/wifi-watchdog.sh /usr/local/bin/wifi-watchdog.sh
 RUN chmod +x /usr/local/bin/wifi-watchdog.sh
 
 CMD /usr/local/bin/wifi-watchdog.sh
