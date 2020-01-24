@@ -4,7 +4,7 @@ FROM ubuntu:18.04
 RUN apt-get update && apt-get install -y autossh iproute2 \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /usr/share/locale/* && rm -rf /usr/share/man/* && rm -rf /usr/share/doc/*
+    && rm -rf /usr/share/locale/* /usr/share/man/* /usr/share/doc/*
 
 # Setup ssh key
 COPY keys/id_rsa /root/.ssh/id_rsa
