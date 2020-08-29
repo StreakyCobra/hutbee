@@ -21,8 +21,8 @@ CMD /usr/bin/autossh \
   -o StrictHostKeyChecking=no \
   -R *:80:controller:80 \
   -L *:80:backend:80 \
-  -R *:5672:messaging:5672 \
-  -R *:15672:messaging:15672 \
+  -R *:${RABBITMQ_PORT}:messaging:5672 \
+  -R *:${RABBITMQ_MGMT_PORT}:messaging:15672 \
   -R *:${CONTROLLER_SSH_PORT}:$(/sbin/ip route|awk '/default/ { print  $3}'):${CONTROLLER_SSH_PORT} \
   -N \
   -p ${CONTROLLER_PROXY_SSH_PORT} \

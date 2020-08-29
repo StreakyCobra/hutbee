@@ -68,6 +68,7 @@ services:
     ports:
       - "${CONTROLLER_PROXY_SSH_PORT}:${CONTROLLER_PROXY_SSH_PORT}"
       - "${CONTROLLER_SSH_PORT}:${CONTROLLER_SSH_PORT}"
+      - "${RABBITMQ_MGMT_PORT}:${RABBITMQ_MGMT_PORT}"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.controller-http.entrypoints=http"

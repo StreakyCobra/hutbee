@@ -11,6 +11,8 @@ services:
       - "CONTROLLER_SSH_PORT"
       - "CONTROLLER_PROXY_HOSTNAME"
       - "CONTROLLER_PROXY_SSH_PORT"
+      - "RABBITMQ_PORT"
+      - "RABBITMQ_MGMT_PORT"
 
   controller:
     build:
@@ -33,9 +35,6 @@ services:
       - "RABBITMQ_DEFAULT_PASS"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
-    expose:
-      - 5672
-      - 15672
 
 volumes:
   rabbitmq:
