@@ -25,11 +25,12 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-http.entrypoints=http"
       - "traefik.http.routers.frontend-http.rule=Host(`${FRONTEND_HOSTNAME}`)"
-      - "traefik.http.routers.frontend-http.middlewares=frontend-redirect@docker"
-      - "traefik.http.middlewares.frontend-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.frontend-http.middlewares=frontend-http-redirect@docker"
+      - "traefik.http.middlewares.frontend-http-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.frontend-https.entrypoints=https"
       - "traefik.http.routers.frontend-https.rule=Host(`${FRONTEND_HOSTNAME}`)"
       - "traefik.http.routers.frontend-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.frontend-https.service=frontend-https"
       - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
 
   backend:
@@ -51,11 +52,12 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"
       - "traefik.http.routers.backend-http.rule=Host(`${BACKEND_HOSTNAME}`)"
-      - "traefik.http.routers.backend-http.middlewares=backend-redirect@docker"
-      - "traefik.http.middlewares.backend-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.backend-http.middlewares=backend-http-redirect@docker"
+      - "traefik.http.middlewares.backend-http-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.backend-https.entrypoints=https"
       - "traefik.http.routers.backend-https.rule=Host(`${BACKEND_HOSTNAME}`)"
       - "traefik.http.routers.backend-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.backend-https.service=backend-https"
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
 
   controller:
@@ -71,7 +73,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.controller-http.entrypoints=http"
-      - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`);Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`)"
       - "traefik.http.routers.controller-http.middlewares=controller-http-redirect@docker"
       - "traefik.http.middlewares.controller-http-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.controller-https.entrypoints=https"
@@ -79,11 +81,15 @@ services:
       - "traefik.http.routers.controller-https.tls.certResolver=letsencrypt"
       - "traefik.http.routers.controller-https.service=controller-https"
       - "traefik.http.services.controller-https.loadbalancer.server.port=80"
-      - "traefik.http.routers.controller-rabbit-https.entrypoints=https"
-      - "traefik.http.routers.controller-rabbit-https.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
-      - "traefik.http.routers.controller-rabbit-https.tls.certResolver=letsencrypt"
-      - "traefik.http.routers.controller-rabbit-https.service=controller-rabbit-https"
-      - "traefik.http.services.controller-rabbit-https.loadbalancer.server.port=${RABBITMQ_MGMT_PORT}"
+      - "traefik.http.routers.messaging-http.entrypoints=http"
+      - "traefik.http.routers.messaging-http.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.messaging-http.middlewares=messaging-http-redirect@docker"
+      - "traefik.http.middlewares.messaging-http-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.messaging-rabbit-https.entrypoints=https"
+      - "traefik.http.routers.messaging-rabbit-https.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.messaging-rabbit-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.messaging-rabbit-https.service=messaging-rabbit-https"
+      - "traefik.http.services.messaging-rabbit-https.loadbalancer.server.port=${RABBITMQ_MGMT_PORT}"
 
   db:
     image: mongo:4
