@@ -17,6 +17,9 @@ services:
       context: ./
       dockerfile: containers/controller/Dockerfile
     restart: always
+    environment:
+      - "RABBITMQ_DEFAULT_USER"
+      - "RABBITMQ_DEFAULT_PASS"
     volumes:
       - "/usr/share/hutbee/temperatures.csv:/app/temperatures.csv"
     devices:
