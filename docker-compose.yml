@@ -107,6 +107,33 @@ services:
     command: "--wiredTigerCacheSizeGB 1.0"
 
 
+  mongo-express:
+    image: mongo-express:latest
+    restart: always
+    environment:
+      - "ME_CONFIG_MONGODB_ENABLE_ADMIN=false"
+      - "ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_USERNAME}"
+      - "ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_PASSWORD}"
+      - "ME_CONFIG_MONGODB_AUTH_DATABASE=${MONGO_DB_NAME}"
+      - "ME_CONFIG_MONGODB_SERVER=${MONGO_HOST}"
+      - "ME_CONFIG_MONGODB_PORT=${MONGO_PORT}"
+      - "ME_CONFIG_BASICAUTH_USERNAME"
+      - "ME_CONFIG_BASICAUTH_PASSWORD"
+      - "ME_CONFIG_SITE_COOKIESECRET"
+      - "ME_CONFIG_SITE_SESSIONSECRET"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mongo-express-http.entrypoints=http"
+      - "traefik.http.routers.mongo-express-http.rule=Host(`${MONGO_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.mongo-express-http.middlewares=mongo-express-http-redirect@docker"
+      - "traefik.http.middlewares.mongo-express-http-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.mongo-express-https.entrypoints=https"
+      - "traefik.http.routers.mongo-express-https.rule=Host(`${MONGO_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.mongo-express-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.mongo-express-https.service=mongo-express-https"
+      - "traefik.http.services.mongo-express-https.loadbalancer.server.port=8081"
+
+
 volumes:
   mongo-db:
   mongo-configdb:
