@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 # Update the distribution and install dependencies from the official repos
 RUN apt-get update && apt-get install -y openssh-server \
