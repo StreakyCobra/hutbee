@@ -74,6 +74,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.controller-http.entrypoints=http"
       - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`)"
+      - "traefik.http.routers.controller-http.service=controller-https"
       - "traefik.http.routers.controller-http.middlewares=controller-http-redirect@docker"
       - "traefik.http.middlewares.controller-http-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.controller-https.entrypoints=https"
@@ -83,13 +84,14 @@ services:
       - "traefik.http.services.controller-https.loadbalancer.server.port=80"
       - "traefik.http.routers.messaging-http.entrypoints=http"
       - "traefik.http.routers.messaging-http.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.messaging-http.service=messaging-https"
       - "traefik.http.routers.messaging-http.middlewares=messaging-http-redirect@docker"
       - "traefik.http.middlewares.messaging-http-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.messaging-rabbit-https.entrypoints=https"
-      - "traefik.http.routers.messaging-rabbit-https.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
-      - "traefik.http.routers.messaging-rabbit-https.tls.certResolver=letsencrypt"
-      - "traefik.http.routers.messaging-rabbit-https.service=messaging-rabbit-https"
-      - "traefik.http.services.messaging-rabbit-https.loadbalancer.server.port=${RABBITMQ_MGMT_PORT}"
+      - "traefik.http.routers.messaging-https.entrypoints=https"
+      - "traefik.http.routers.messaging-https.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.messaging-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.messaging-https.service=messaging-https"
+      - "traefik.http.services.messaging-https.loadbalancer.server.port=${RABBITMQ_MGMT_PORT}"
 
   db:
     image: mongo:4
