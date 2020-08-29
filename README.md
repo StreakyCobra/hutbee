@@ -1,13 +1,13 @@
 # Hutbee
 
-<img src="https://user-images.githubusercontent.com/1587877/67436463-bb01f500-f5ee-11e9-88c3-06f1800041b3.png" alt="drawing" width="200" align="right"/>
+<img src="https://user-images.githubusercontent.com/1587877/67436463-bb01f500-f5ee-11e9-88c3-06f1800041b3.png" alt="drawing" width="200" style="float:right"/>
 
 This project is a solution for remotely monitoring and controlling a mountain
-hut. The main goals are to monitor inside and outside temperatures, CO₂ levels
+hut. The main goals are to monitor inside and outside temperatures, CO₂ levels,
 and the weather (with a webcam), as well as to control heating to preheat the
 hut before going there.
 
-## Deployement
+## Deployment
 
 To deploy the frontend and backend, you will need a recent and working version
 of `docker` and `docker-compose` installed.
@@ -33,7 +33,7 @@ of `docker` and `docker-compose` installed.
    docker-compose up -d
    ```
 
-## Developement setup
+## Development setup
 
 In order to work on this project on your local machine, you will need a working
 installation of `python>=3.7` and recent version of `npm/node.js`.
