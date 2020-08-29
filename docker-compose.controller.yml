@@ -21,3 +21,18 @@ services:
       - "/usr/share/hutbee/temperatures.csv:/app/temperatures.csv"
     devices:
       - "/dev/i2c-1"
+
+  messaging:
+    image: rabbitmq:3-management
+    restart: always
+    environment:
+      - "RABBITMQ_DEFAULT_USER"
+      - "RABBITMQ_DEFAULT_PASS"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    expose:
+      - 5672
+      - 15672
+
+volumes:
+  rabbitmq:
