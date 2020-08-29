@@ -71,16 +71,18 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.controller-http.entrypoints=http"
-      - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`)"
+      - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`);Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
       - "traefik.http.routers.controller-http.middlewares=controller-http-redirect@docker"
       - "traefik.http.middlewares.controller-http-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.controller-https.entrypoints=https"
       - "traefik.http.routers.controller-https.rule=Host(`${CONTROLLER_HOSTNAME}`)"
       - "traefik.http.routers.controller-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.controller-https.service=controller-https"
       - "traefik.http.services.controller-https.loadbalancer.server.port=80"
       - "traefik.http.routers.controller-rabbit-https.entrypoints=https"
       - "traefik.http.routers.controller-rabbit-https.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
       - "traefik.http.routers.controller-rabbit-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.controller-rabbit-https.service=controller-rabbit-https"
       - "traefik.http.services.controller-rabbit-https.loadbalancer.server.port=${RABBITMQ_MGMT_PORT}"
 
   db:
