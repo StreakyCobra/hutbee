@@ -64,3 +64,24 @@ installation of `python>=3.7` and recent version of `npm/node.js`.
    ```
 
    Note: The backend supports hot-reloads, no need to restart after saving.
+
+## Raspberry PI preparation
+
+1. Download and prepare a `Raspberry Pi OS light` SDCard
+
+2. Create an empty `ssh` file and a valid `wpa_supplicant.conf` file in the
+   `boot` partition of the SDCard to have Wi-Fi working and SSH enabled
+
+3. Boot the raspberry and set it up (account, password, `sshd_config`, `ufw`)
+
+4. Install `hutbee`, configure `.env` and start the `controller` services.
+
+5. Create the file `/etc/network/interfaces.d/wlan0` with the following content:
+
+   ```conf
+   allow-hotplug wlan0
+   iface wlan0 inet manual
+     wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+
+   iface default inet dhcp
+   ```
