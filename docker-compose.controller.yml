@@ -21,13 +21,3 @@ services:
       - "/usr/share/hutbee/temperatures.csv:/app/temperatures.csv"
     devices:
       - "/dev/i2c-1"
-
-  controller-wifi:
-    build:
-      context: ./
-      dockerfile: containers/controller-wifi/Dockerfile
-    restart: always
-    network_mode: host
-    privileged: true
-    environment:
-      - "BACKEND_HOSTNAME"
