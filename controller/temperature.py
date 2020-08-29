@@ -77,6 +77,7 @@ def main():
     connection = setup_messaging()
     producer = connection.Producer()
     exchange = kombu.Exchange('temperatures')(connection)
+    exchange.declare()
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(store_temperature, "interval", seconds=60)
