@@ -62,7 +62,7 @@ def store_temperature():
 
 def publish_temperature(producer, exchange):
     """Publish the temperature in messaging system."""
-    producer.publish({"temperature": 0.0}, exchange=exchange)
+    producer.publish({"date": datetime.utcnow(), "temperature": 0.0}, exchange=exchange)
 
 
 def setup_messaging():
