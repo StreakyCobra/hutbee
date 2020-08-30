@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Hutbee notifications."""
 
-import telegram
 from hutbee.models.user import User
 from hutbee.workers import telegram
 from logzero import logger
