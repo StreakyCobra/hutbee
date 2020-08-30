@@ -6,7 +6,7 @@ from typing import Dict, Optional
 
 from decorator import decorator
 from flask import request
-from hutbee.domain.user import User
+from hutbee.models.user import User
 from pymongo.errors import DuplicateKeyError
 
 import bcrypt
