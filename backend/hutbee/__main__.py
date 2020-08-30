@@ -11,12 +11,6 @@ from hutbee.api import APP
 
 def main():
     """Entry point for running hutbee backend."""
-    # Enable Visual Studio Code remote debugging in debug mode
-    if config.DEBUG and "WERKZEUG_RUN_MAIN" in os.environ:
-        import ptvsd
-
-        ptvsd.enable_attach()
-
     # In debug mode take care of running the scheduler jobs. In production mode
     # this is managed with uwsgi mules.
     if config.DEBUG and "WERKZEUG_RUN_MAIN" in os.environ:
