@@ -85,3 +85,33 @@ installation of `python>=3.7` and recent version of `npm/node.js`.
 
    iface default inet dhcp
    ```
+
+## Docker security config
+
+1. Disable docker playing with `iptables` by editing `/etc/systemd/system/multi-user.target.wants/docker.service`:
+
+   ```conf
+   ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --iptables=false
+   ```
+
+2. Enable ufw forwarding for docker by adding this at the beginning of
+   `/etc/ufw/before.rules`:
+
+   ```conf
+   *nat
+   :POSTROUTING ACCEPT [0:0]
+   -A POSTROUTING ! -o docker0 -s 172.17.0.0/16 -j MASQUERADE
+   COMMIT
+   ```
+
+3. Enable packet forwarding by uncommenting this in `/etc/ufw/sysctl.conf`:
+
+   ```conf
+   net/ipv4/ip_forward=1
+   ```
+
+4. Allow traffic from docker subnetworks:
+
+   ```conf
+   $ sudo ufw allow from 172.16.0.0/12
+   ```
