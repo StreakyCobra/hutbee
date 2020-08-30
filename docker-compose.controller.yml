@@ -27,6 +27,15 @@ services:
     devices:
       - "/dev/i2c-1"
 
+  controller-wifi:
+    build:
+      context: ./
+      dockerfile: containers/controller-wifi/Dockerfile
+    restart: always
+    privileged: true
+    environment:
+      - "BACKEND_HOSTNAME"
+
   messaging:
     image: rabbitmq:3-management
     restart: always
