@@ -21,7 +21,7 @@ except FileNotFoundError:
     FAKE = True
 
 APP = Flask(__name__)
-TEMP_IN_ADDR = 0x1b
+TEMP_IN_ADDR = 0x1B
 TEMP_OUT_ADDR = 0x18
 
 
@@ -62,27 +62,33 @@ def store_temperature():
 
 def publish_temperature(producer, exchange):
     """Publish the temperature in messaging system."""
-    producer.publish({'temperature': 0.}, exchange=exchange)
+    producer.publish({"temperature": 0.0}, exchange=exchange)
 
 
 def setup_messaging():
     user = os.environ["RABBITMQ_DEFAULT_USER"]
     password = os.environ["RABBITMQ_DEFAULT_PASS"]
-    uri = f'amqp://{user}:{password}@messaging:5672'
-    with kombu.Connection(uri, transport_options={'confirm_publish': True}) as connection:
+    uri = f"amqp://{user}:{password}@messaging:5672"
+    with kombu.Connection(
+        uri, transport_options={"confirm_publish": True}
+    ) as connection:
         return connection
 
 
 def main():
     connection = setup_messaging()
     producer = connection.Producer()
-    exchange = kombu.Exchange('temperatures')(connection)
+    exchange = kombu.Exchange("temperatures")(connection)
     exchange.declare()
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(store_temperature, "interval", seconds=60)
-    scheduler.add_job(publish_temperature, "interval", seconds=1,
-                      kwargs={"producer": producer, "exchange": exchange})
+    scheduler.add_job(
+        publish_temperature,
+        "interval",
+        seconds=1,
+        kwargs={"producer": producer, "exchange": exchange},
+    )
 
     scheduler.start()
     APP.run(host="0.0.0.0", port="80")
