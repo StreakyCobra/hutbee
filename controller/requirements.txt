@@ -14,6 +14,7 @@ jinja2==2.10.3            # via flask
 kombu==5.0.1              # via -r requirements.in
 markupsafe==1.1.1         # via jinja2
 pytz==2019.3              # via apscheduler, tzlocal
+scd30-i2c==0.0.5          # via -r requirements.in
 six==1.13.0               # via apscheduler
 smbus2==0.3.0             # via -r requirements.in
 tzlocal==2.0.0            # via apscheduler

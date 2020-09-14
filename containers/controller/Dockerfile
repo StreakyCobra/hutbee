@@ -4,4 +4,4 @@ COPY controller /app
 WORKDIR /app
 RUN pip install -r requirements.txt
 
-CMD python -u temperature.py
+CMD python -u sensing.py

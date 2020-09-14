@@ -1,4 +1,5 @@
-smbus2~=0.3.0
-flask~=1.1.2
 apscheduler~=3.6.3
+flask~=1.1.2
 kombu~=5.0.1
+scd30-i2c~=0.0.5
+smbus2~=0.3.0
