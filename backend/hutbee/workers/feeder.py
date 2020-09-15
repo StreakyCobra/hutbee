@@ -17,7 +17,7 @@ def store_measurement(body, message: kombu.Message):
     message.ack()
 
 
-def run_worker():
+def main():
     """Run the feeder worker."""
     user = os.environ["RABBITMQ_DEFAULT_USER"]
     password = os.environ["RABBITMQ_DEFAULT_PASS"]
@@ -32,3 +32,7 @@ def run_worker():
                 consumer = connection.Consumer(queues=[queue], channel=channel)
                 consumer.consume(callback=store_measurement)
         time.sleep(1)
+
+
+if __name__ == "__main__":
+    main()
