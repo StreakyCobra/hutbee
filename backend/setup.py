@@ -17,6 +17,7 @@ setup(
         "flask-cors~=3.0",
         "flask-jwt-extended~=3.24",
         "flask~=1.1",
+        "kombu~=5.0.1",
         "logzero~=1.5",
         "pymongo~=3.9",
         "python-dotenv~=0.10",

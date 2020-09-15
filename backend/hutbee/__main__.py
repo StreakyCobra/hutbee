@@ -14,10 +14,12 @@ def main():
     # In debug mode take care of running the scheduler jobs. In production mode
     # this is managed with uwsgi mules.
     if config.DEBUG and "WERKZEUG_RUN_MAIN" in os.environ:
+        from hutbee.workers import feeder
         from hutbee.workers import healthchecks
         from hutbee.workers import jobs
         from hutbee.workers import telegram
 
+        feeder.run_worker()
         healthchecks.run_worker(is_mule=False)
         jobs.run_worker(is_mule=False)
         telegram.run_worker(is_mule=False)

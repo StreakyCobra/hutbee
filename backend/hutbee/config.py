@@ -75,6 +75,9 @@ JOBS_COL = "jobs"
 HEALTHCHECKS_COL = "healthchecks"
 """Name of the healthchecks collection in the database."""
 
+MEASUREMENTS_COL = "measurements"
+"""Name of the measurements collection in the database."""
+
 
 # --------------------------------------------------------------------------- #
 # AUTHENTICATION                                                              #

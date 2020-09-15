@@ -4,6 +4,7 @@
 #
 #    pip-compile
 #
+amqp==5.0.1               # via kombu
 apscheduler==3.6.3
 bcrypt==3.1.7
 certifi==2019.9.11        # via python-telegram-bot, requests
@@ -17,8 +18,10 @@ flask-jwt-extended==3.24.1
 flask==1.1.1
 future==0.18.2            # via python-telegram-bot
 idna==2.8                 # via requests
+importlib-metadata==1.7.0  # via kombu
 itsdangerous==1.1.0       # via flask
 jinja2==2.10.3            # via flask
+kombu==5.0.2
 logzero==1.5.0
 markupsafe==1.1.1         # via jinja2
 pycparser==2.19           # via cffi
@@ -32,7 +35,9 @@ six==1.13.0               # via apscheduler, bcrypt, cryptography, flask-cors, f
 tornado==6.0.3            # via python-telegram-bot
 tzlocal==2.0.0            # via apscheduler
 urllib3==1.25.7           # via requests
+vine==5.0.0               # via amqp
 werkzeug==0.16.0          # via flask, flask-jwt-extended
+zipp==3.1.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.6.0        # via apscheduler
+# setuptools==50.3.0        # via apscheduler
