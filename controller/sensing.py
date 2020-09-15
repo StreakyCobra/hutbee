@@ -17,7 +17,12 @@ INDOOR.start_periodic_measurement()
 
 def measure_indoor():
     if INDOOR.get_data_ready():
-        return INDOOR.read_measurement()
+        measurement = INDOOR.read_measurement()
+        return {
+            "co2": measurement[0],
+            "temperature": measurement[1],
+            "humidity": measurement[2],
+        }
     else:
         raise None
 
