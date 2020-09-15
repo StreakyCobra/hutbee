@@ -2,19 +2,34 @@
 """Hutbee feeder."""
 import os
 import time
+from typing import Any
 
 import kombu
+from kombu.mixins import ConsumerMixin
 from logzero import logger
 
 from hutbee import config
 from hutbee.db import DB
 
 
-def store_measurement(body, message: kombu.Message):
-    """Store a measurement in the database."""
-    DB[config.MEASUREMENTS_COL].insert_one(body)
-    logger.info(f"Measurement processed")
-    message.ack()
+class Worker(ConsumerMixin):
+    def __init__(self, connection, queue):
+        self.connection = connection
+        self.queue = queue
+
+    def get_consumers(self, Consumer, channel):
+        return [
+            Consumer(
+                queues=self.queue,
+                callbacks=[self.store_measurement],
+            )
+        ]
+
+    def store_measurement(self, body: Any, message: kombu.Message):
+        """Store a measurement in the database."""
+        DB[config.MEASUREMENTS_COL].insert_one(body)
+        logger.info(f"Measurement processed")
+        message.ack()
 
 
 def main():
@@ -22,16 +37,15 @@ def main():
     user = os.environ["RABBITMQ_DEFAULT_USER"]
     password = os.environ["RABBITMQ_DEFAULT_PASS"]
     uri = f"amqp://{user}:{password}@controller:5672"
+    queue = kombu.Queue("measurements.backend")
 
     while True:
         with kombu.Connection(uri) as connection:
             with connection.channel() as channel:
-                queue = kombu.Queue("measurements.backend")
                 queue.declare(channel=channel)
                 queue.bind_to("measurements", channel=channel)
-                consumer = connection.Consumer(queues=[queue], channel=channel)
-                consumer.register_callback(store_measurement)
-                consumer.consume()
+            worker = Worker(connection, queue)
+            worker.run()
         time.sleep(1)
 
 
