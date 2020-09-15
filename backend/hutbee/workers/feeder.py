@@ -40,12 +40,15 @@ def main():
     queue = kombu.Queue("measurements.backend")
 
     while True:
-        with kombu.Connection(uri) as connection:
-            with connection.channel() as channel:
-                queue.declare(channel=channel)
-                queue.bind_to("measurements", channel=channel)
-            worker = Worker(connection, queue)
-            worker.run()
+        try:
+            with kombu.Connection(uri) as connection:
+                with connection.channel() as channel:
+                    queue.declare(channel=channel)
+                    queue.bind_to("measurements", channel=channel)
+                worker = Worker(connection, queue)
+                worker.run()
+        except ConnectionRefusedError as e:
+            logger.warning("Connection to rabbitmq failed")
         time.sleep(1)
 
 
