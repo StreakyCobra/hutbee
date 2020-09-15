@@ -47,7 +47,7 @@ def main():
                     queue.bind_to("measurements", channel=channel)
                 worker = Worker(connection, queue)
                 worker.run()
-        except ConnectionRefusedError as e:
+        except ConnectionError:
             logger.warning("Connection to rabbitmq failed")
         time.sleep(60)
 
