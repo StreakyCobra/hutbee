@@ -29,6 +29,6 @@ def run_worker():
                 queue = kombu.Queue("measurements.backend")
                 queue.declare(channel=channel)
                 queue.bind_to("measurements", channel=channel)
-            consumer = connection.Consumer(queues=[queue], channel=channel)
-            consumer.consume(callback=store_measurement)
+                consumer = connection.Consumer(queues=[queue], channel=channel)
+                consumer.consume(callback=store_measurement)
         time.sleep(1)
