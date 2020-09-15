@@ -49,7 +49,7 @@ def main():
                 worker.run()
         except ConnectionRefusedError as e:
             logger.warning("Connection to rabbitmq failed")
-        time.sleep(1)
+        time.sleep(60)
 
 
 if __name__ == "__main__":
