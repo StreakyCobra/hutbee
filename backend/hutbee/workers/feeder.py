@@ -30,7 +30,8 @@ def main():
                 queue.declare(channel=channel)
                 queue.bind_to("measurements", channel=channel)
                 consumer = connection.Consumer(queues=[queue], channel=channel)
-                consumer.consume(callback=store_measurement)
+                consumer.register_callback(store_measurement)
+                consumer.consume()
         time.sleep(1)
 
 
