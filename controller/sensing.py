@@ -52,9 +52,9 @@ def setup_messaging():
 
 def main():
     connection = setup_messaging()
-    producer = connection.Producer()
-    exchange = kombu.Exchange("temperatures")(connection)
+    exchange = kombu.Exchange("measurements")(connection)
     exchange.declare()
+    producer = connection.Producer()
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(
