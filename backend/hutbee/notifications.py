@@ -2,7 +2,7 @@
 """Hutbee notifications."""
 
 from hutbee.models.user import User
-from hutbee.workers import telegram
+from hutbee.mules import telegram
 from logzero import logger
 
 

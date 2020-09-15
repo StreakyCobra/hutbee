@@ -15,9 +15,9 @@ def main():
     # this is managed with uwsgi mules.
     if config.DEBUG and "WERKZEUG_RUN_MAIN" in os.environ:
         from hutbee.workers import feeder
-        from hutbee.workers import healthchecks
-        from hutbee.workers import jobs
-        from hutbee.workers import telegram
+        from hutbee.mules import healthchecks
+        from hutbee.mules import jobs
+        from hutbee.mules import telegram
 
         feeder.run_worker()
         healthchecks.run_worker(is_mule=False)

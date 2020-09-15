@@ -21,7 +21,7 @@ try:
     import uwsgi
 
     UWSGI = True
-    MULE_NUM = 4
+    MULE_NUM = 3
 except ImportError:
     UWSGI = False
 
