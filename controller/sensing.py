@@ -28,16 +28,19 @@ def measure_indoor():
 
 
 @APP.route("/")
-def api_sense():
-    """Return the """
+def api_measurements():
+    """Return the measurements."""
     indoor = measure_indoor()
     return jsonify(indoor=indoor)
 
 
-def publish_temperature(producer, exchange):
-    """Publish the temperature in messaging system."""
+def publish_measurements(producer, exchange):
+    """Publish the measurements in the exchange."""
     indoor = measure_indoor()
-    producer.publish({"date": datetime.utcnow(), "indoor": indoor}, exchange=exchange)
+    producer.publish(
+        {"date": datetime.utcnow(), "type": "indoor", "values": indoor},
+        exchange=exchange,
+    )
 
 
 def setup_messaging():
@@ -58,7 +61,7 @@ def main():
 
     scheduler = BackgroundScheduler()
     scheduler.add_job(
-        publish_temperature,
+        publish_measurements,
         "interval",
         seconds=60,
         kwargs={"producer": producer, "exchange": exchange},
