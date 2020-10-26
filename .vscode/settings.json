@@ -3,5 +3,5 @@
     "files.exclude": {
         "**/__pycache__/": true
     },
-    "python.pythonPath": "/home/fabien/.conda/envs/playground/bin/python"
+    "python.pythonPath": "/home/fabien/.conda/envs/hutbee/bin/python"
 }
