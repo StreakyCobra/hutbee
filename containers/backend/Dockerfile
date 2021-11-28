@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.9
 
 # Update the distribution and install dependencies from the official repos
 RUN apt-get update && apt-get install -y nginx supervisor \
