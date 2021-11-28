@@ -3,7 +3,7 @@ version: "2.4"
 services:
 
   traefik:
-    image: traefik:v2.0
+    image: traefik:2.5.4
     restart: unless-stopped
     ports:
       - "80:80"
@@ -78,7 +78,7 @@ services:
       - "traefik.http.services.rabbitmq-https.loadbalancer.server.port=${RABBITMQ_MGMT_PORT}"
 
   db:
-    image: mongo:4
+    image: mongo:4.4
     restart: unless-stopped
     volumes:
       - mongo-db:/data/db
@@ -92,7 +92,7 @@ services:
 
 
   mongo-express:
-    image: mongo-express:latest
+    image: mongo-express:1.0.0-alpha
     restart: unless-stopped
     environment:
       - "ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_USERNAME}"
