@@ -4,7 +4,7 @@ services:
 
   traefik:
     image: traefik:v2.0
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -19,7 +19,7 @@ services:
     build:
       context: ./
       dockerfile: containers/backend/Dockerfile
-    restart: always
+    restart: unless-stopped
     environment:
       - "HUTBEE_PRODUCTION=true"
       - "CONTROLLER_HOSTNAME"
@@ -50,7 +50,7 @@ services:
       dockerfile: containers/backend-proxy/Dockerfile
       args:
         CONTROLLER_PROXY_SSH_PORT: "${CONTROLLER_PROXY_SSH_PORT}"
-    restart: always
+    restart: unless-stopped
     ports:
       - "${CONTROLLER_PROXY_SSH_PORT}:${CONTROLLER_PROXY_SSH_PORT}"
       - "${CONTROLLER_SSH_PORT}:${CONTROLLER_SSH_PORT}"
@@ -79,7 +79,7 @@ services:
 
   db:
     image: mongo:4
-    restart: always
+    restart: unless-stopped
     volumes:
       - mongo-db:/data/db
       - mongo-configdb:/data/configdb
@@ -93,7 +93,7 @@ services:
 
   mongo-express:
     image: mongo-express:latest
-    restart: always
+    restart: unless-stopped
     environment:
       - "ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_USERNAME}"
       - "ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_PASSWORD}"
