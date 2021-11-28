@@ -9,8 +9,8 @@ hut before going there.
 
 ## Deployment
 
-To deploy the frontend and backend, you will need a recent and working version
-of `docker` and `docker-compose` installed.
+To deploy the backend you will need a recent and working version of `docker` and
+`docker-compose` installed.
 
 1. Copy the `.env.template` file to `.env` and edit it variable with **production**
    values:
@@ -46,16 +46,7 @@ installation of `python>=3.7` and recent version of `npm/node.js`.
    vim .env
    ```
    
-2. Open a terminal and run the frontend:
-
-   ```
-   cd frontend
-   npm run serve
-   ```
-
-   Note: The frontend supports hot-reloads, no need to restart after saving.
-   
-3. Open a terminal and run the backend:
+2. Open a terminal and run the backend:
 
    ```
    cd backend
@@ -64,4 +55,3 @@ installation of `python>=3.7` and recent version of `npm/node.js`.
    ```
 
    Note: The backend supports hot-reloads, no need to restart after saving.
-
