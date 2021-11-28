@@ -37,7 +37,7 @@ services:
     environment:
       - "BACKEND_HOSTNAME"
 
-  messaging:
+  rabbitmq:
     image: rabbitmq:3-management
     restart: always
     environment:

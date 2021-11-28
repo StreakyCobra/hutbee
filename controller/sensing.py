@@ -43,10 +43,10 @@ def publish_measurements(producer, exchange):
     )
 
 
-def setup_messaging():
+def setup_rabbitmq():
     user = os.environ["RABBITMQ_DEFAULT_USER"]
     password = os.environ["RABBITMQ_DEFAULT_PASS"]
-    uri = f"amqp://{user}:{password}@messaging:5672"
+    uri = f"amqp://{user}:{password}@rabbitmq:5672"
     with kombu.Connection(
         uri, transport_options={"confirm_publish": True}
     ) as connection:
@@ -54,7 +54,7 @@ def setup_messaging():
 
 
 def main():
-    connection = setup_messaging()
+    connection = setup_rabbitmq()
     exchange = kombu.Exchange("measurements")(connection)
     exchange.declare()
     producer = connection.Producer()
