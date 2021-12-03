@@ -34,8 +34,8 @@ class Worker(ConsumerMixin):
 
 def main():
     """Run the feeder worker."""
-    user = os.environ["CONTROLLER_RABBITMQ_DEFAULT_USER"]
-    password = os.environ["CONTROLLER_RABBITMQ_DEFAULT_PASS"]
+    user = os.environ["CONTROLLER_RABBITMQ_USERNAME"]
+    password = os.environ["CONTROLLER_RABBITMQ_PASSWORD"]
     port = os.environ["CONTROLLER_RABBITMQ_PORT"]
     uri = f"amqp://{user}:{password}@controller:{port}"
     queue = kombu.Queue("measurements.backend")

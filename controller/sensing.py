@@ -44,8 +44,8 @@ def publish_measurements(producer, exchange):
 
 
 def setup_rabbitmq():
-    user = os.environ["CONTROLLER_RABBITMQ_DEFAULT_USER"]
-    password = os.environ["CONTROLLER_RABBITMQ_DEFAULT_PASS"]
+    user = os.environ["CONTROLLER_RABBITMQ_USERNAME"]
+    password = os.environ["CONTROLLER_RABBITMQ_PASSWORD"]
     uri = f"amqp://{user}:{password}@controller-rabbitmq:5672"
     with kombu.Connection(
         uri, transport_options={"confirm_publish": True}

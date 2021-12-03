@@ -30,8 +30,8 @@ services:
       - "MONGO_USERNAME"
       - "JWT_SECRET_KEY"
       - "TELEGRAM_BOT_TOKEN"
-      - "CONTROLLER_RABBITMQ_DEFAULT_USER"
-      - "CONTROLLER_RABBITMQ_DEFAULT_PASS"
+      - "CONTROLLER_RABBITMQ_USERNAME"
+      - "CONTROLLER_RABBITMQ_PASSWORD"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"

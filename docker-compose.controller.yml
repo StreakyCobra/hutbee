@@ -23,8 +23,8 @@ services:
       dockerfile: containers/controller/Dockerfile
     restart: unless-stopped
     environment:
-      - "CONTROLLER_RABBITMQ_DEFAULT_USER"
-      - "CONTROLLER_RABBITMQ_DEFAULT_PASS"
+      - "CONTROLLER_RABBITMQ_USERNAME"
+      - "CONTROLLER_RABBITMQ_PASSWORD"
     volumes:
       - "/usr/share/hutbee/temperatures.csv:/app/temperatures.csv"
     devices:
@@ -44,8 +44,8 @@ services:
     image: rabbitmq:3-management
     restart: unless-stopped
     environment:
-      - "CONTROLLER_RABBITMQ_DEFAULT_USER"
-      - "CONTROLLER_RABBITMQ_DEFAULT_PASS"
+      - "RABBITMQ_DEFAULT_USER=${CONTROLLER_RABBITMQ_USERNAME}"
+      - "RABBITMQ_DEFAULT_PASS=${CONTROLLER_RABBITMQ_PASSWORD}"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
 
