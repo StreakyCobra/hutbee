@@ -32,6 +32,7 @@ services:
       - "TELEGRAM_BOT_TOKEN"
       - "CONTROLLER_RABBITMQ_USERNAME"
       - "CONTROLLER_RABBITMQ_PASSWORD"
+      - "CONTROLLER_RABBITMQ_PORT"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"
