@@ -7,6 +7,7 @@ import os
 import time
 
 import kombu
+from kombu.mixins import ConsumerMixin
 from logzero import logger
 
 from hutbee import auth, config
