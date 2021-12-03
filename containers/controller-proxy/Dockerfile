@@ -27,11 +27,11 @@ CMD /usr/bin/autossh \
   -o ServerAliveCountMax=3 \
   -o StrictHostKeyChecking=yes \
   -o CheckHostIP=no \
-  -R *:80:controller:80 \
   -L *:80:backend:80 \
-  -R *:${CONTROLLER_RABBITMQ_PORT}:controller-rabbitmq:${CONTROLLER_RABBITMQ_PORT} \
-  -R *:${CONTROLLER_RABBITMQ_MGMT_PORT}:controller-rabbitmq:${CONTROLLER_RABBITMQ_MGMT_PORT} \
+  -R *:80:controller:80 \
+  -R *:${CONTROLLER_RABBITMQ_PORT}:controller-rabbitmq:5672 \
+  -R *:${CONTROLLER_RABBITMQ_MGMT_PORT}:controller-rabbitmq:15672 \
   -R *:${CONTROLLER_SSH_PORT}:$(/sbin/ip route|awk '/default/ { print  $3}'):${CONTROLLER_SSH_PORT} \
   -N \
   -p ${CONTROLLER_PROXY_SSH_PORT} \
-  ${CONTROLLER_PROXY_HOSTNAME}
+     ${CONTROLLER_PROXY_HOSTNAME}
