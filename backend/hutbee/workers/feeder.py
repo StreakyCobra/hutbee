@@ -38,7 +38,7 @@ def main():
     password = os.environ["CONTROLLER_RABBITMQ_PASSWORD"]
     port = os.environ["CONTROLLER_RABBITMQ_PORT"]
     uri = f"amqp://{user}:{password}@controller:{port}"
-    queue = kombu.Queue("measurements.backend")
+    queue = kombu.Queue("measurements.persist")
 
     while True:
         try:
