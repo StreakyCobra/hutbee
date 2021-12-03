@@ -1,7 +1,0 @@
-{
-    "cSpell.enabled": false,
-    "files.exclude": {
-        "**/__pycache__/": true
-    },
-    "python.pythonPath": "/home/fabien/.conda/envs/hutbee/bin/python"
-}
