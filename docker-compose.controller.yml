@@ -21,7 +21,7 @@ services:
     build:
       context: ./
       dockerfile: containers/controller/Dockerfile
-    restart: always
+    restart: unless-stopped
     environment:
       - "RABBITMQ_DEFAULT_USER"
       - "RABBITMQ_DEFAULT_PASS"
@@ -34,7 +34,7 @@ services:
     build:
       context: ./
       dockerfile: containers/controller-wifi/Dockerfile
-    restart: always
+    restart: unless-stopped
     network_mode: host
     privileged: true
     environment:
@@ -42,7 +42,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    restart: always
+    restart: unless-stopped
     environment:
       - "RABBITMQ_DEFAULT_USER"
       - "RABBITMQ_DEFAULT_PASS"
