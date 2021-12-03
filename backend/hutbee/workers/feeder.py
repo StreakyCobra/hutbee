@@ -29,7 +29,9 @@ class Worker(ConsumerMixin):
     def store_measurement(self, body: Any, message: kombu.Message):
         """Store a measurement in the database."""
         DB[config.MEASUREMENTS_COL].insert_one(body)
-        self.notifier.publish({"username": "fabien", "message": body["temperature"]})
+        self.notifier.publish(
+            {"username": "fabien", "message": body["values"]["temperature"]}
+        )
         logger.info(f"Measurement processed")
         message.ack()
 
