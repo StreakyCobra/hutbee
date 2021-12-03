@@ -18,7 +18,15 @@ RUN sed -i "s/#ClientAliveInterval 0/ClientAliveInterval 20/" /etc/ssh/sshd_conf
 RUN sed -i "s/#ClientAliveCountMax 3/ClientAliveCountMax 3/" /etc/ssh/sshd_config
 
 # Copy allowed ssh key
-COPY keys/id_rsa.pub /root/.ssh/authorized_keys
+COPY keys/controller/id_rsa.pub /root/.ssh/authorized_keys
+
+# Copy ssh host keys
+COPY keys/backend/ssh_host_ecdsa_key       /etc/ssh/ssh_host_ecdsa_key
+COPY keys/backend/ssh_host_ecdsa_key.pub   /etc/ssh/ssh_host_ecdsa_key.pub
+COPY keys/backend/ssh_host_ed25519_key     /etc/ssh/ssh_host_ed25519_key
+COPY keys/backend/ssh_host_ed25519_key.pub /etc/ssh/ssh_host_ed25519_key.pub
+COPY keys/backend/ssh_host_rsa_key         /etc/ssh/ssh_host_rsa_key
+COPY keys/backend/ssh_host_rsa_key.pub     /etc/ssh/ssh_host_rsa_key.pub
 
 # Tell traefik what port to use
 EXPOSE 80
