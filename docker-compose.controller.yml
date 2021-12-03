@@ -40,7 +40,7 @@ services:
     environment:
       - "BACKEND_HOSTNAME"
 
-  rabbitmq:
+  controller-rabbitmq:
     image: rabbitmq:3-management
     restart: unless-stopped
     environment:
