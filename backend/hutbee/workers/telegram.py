@@ -98,7 +98,7 @@ class Worker(ConsumerMixin):
 def main():
     """Run telegram worker."""
     updater = Updater(config.TELEGRAM_BOT_TOKEN, use_context=True)
-    atexit.register(updater.stop())
+    atexit.register(updater.stop)
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", _Telegram.start))
