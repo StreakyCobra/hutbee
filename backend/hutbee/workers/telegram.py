@@ -2,16 +2,25 @@
 # -*- coding: utf-8 -*-
 """Hutbee telegram worker."""
 
-from hutbee import config, auth
-from hutbee.auth import User
+import atexit
+import os
+import time
+
+import kombu
 from logzero import logger
+
+from hutbee import auth, config
+from hutbee.auth import User
+from hutbee.config import USERS_COL
+from hutbee.db import DB
+from hutbee.models.user import User
 from telegram import Update
 from telegram.ext import (
-    Updater,
-    CommandHandler,
-    MessageHandler,
-    Filters,
     CallbackContext,
+    CommandHandler,
+    Filters,
+    MessageHandler,
+    Updater,
 )
 
 
@@ -60,9 +69,35 @@ class _Telegram:
         logger.error('Telegram: update "%s" caused error "%s"', update, context.error)
 
 
+class Worker(ConsumerMixin):
+    def __init__(self, connection, queue, updater):
+        self.connection = connection
+        self.queue = queue
+        self.updater = updater
+
+    def get_consumers(self, Consumer, channel):
+        return [
+            Consumer(
+                queues=self.queue,
+                callbacks=[self.notify],
+            )
+        ]
+
+    def notify(self, body: Any, message: kombu.Message):
+        """Notify a user."""
+        db_user = DB[USERS_COL].find_one({"username": body["username"]})
+        user = User.of(db_user)
+        self.updater.bot.send_message(
+            chat_id=user.telegram_id,
+            text=str(body["message"]),
+        )
+        message.ack()
+
+
 def main():
     """Run telegram worker."""
     updater = Updater(config.TELEGRAM_BOT_TOKEN, use_context=True)
+    atexit.register(updater.stop())
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", _Telegram.start))
@@ -71,7 +106,23 @@ def main():
     dp.add_error_handler(_Telegram.error)
 
     updater.start_polling()
-    updater.idle()
+
+    user = os.environ["BACKEND_RABBITMQ_USERNAME"]
+    password = os.environ["BACKEND_RABBITMQ_PASSWORD"]
+    uri = f"amqp://{user}:{password}@backend:5672"
+    queue = kombu.Queue("notify.telegram")
+
+    while True:
+        try:
+            with kombu.Connection(uri) as connection:
+                with connection.channel() as channel:
+                    queue.declare(channel=channel)
+                    queue.bind_to("notify", channel=channel)
+                worker = Worker(connection, queue, updater)
+                worker.run()
+        except ConnectionError:
+            logger.warning("Connection to rabbitmq failed")
+        time.sleep(60)
 
 
 if __name__ == "__main__":
