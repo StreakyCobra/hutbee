@@ -1,5 +1,2 @@
 .env
 traefik/acme.json
-
-*.iml
-.idea/
