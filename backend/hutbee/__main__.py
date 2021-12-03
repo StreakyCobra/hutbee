@@ -17,12 +17,10 @@ def main():
         from hutbee.workers import feeder
         from hutbee.mules import healthchecks
         from hutbee.mules import jobs
-        from hutbee.mules import telegram
 
         feeder.run_worker()
         healthchecks.run_worker(is_mule=False)
         jobs.run_worker(is_mule=False)
-        telegram.run_worker(is_mule=False)
 
     # Run Flask
     APP.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
