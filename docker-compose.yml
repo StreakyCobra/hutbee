@@ -30,8 +30,8 @@ services:
       - "MONGO_USERNAME"
       - "JWT_SECRET_KEY"
       - "TELEGRAM_BOT_TOKEN"
-      - "RABBITMQ_DEFAULT_USER"
-      - "RABBITMQ_DEFAULT_PASS"
+      - "CONTROLLER_RABBITMQ_DEFAULT_USER"
+      - "CONTROLLER_RABBITMQ_DEFAULT_PASS"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"
@@ -67,15 +67,15 @@ services:
       - "traefik.http.routers.controller-https.service=controller-https"
       - "traefik.http.services.controller-https.loadbalancer.server.port=80"
       - "traefik.http.routers.rabbitmq-http.entrypoints=http"
-      - "traefik.http.routers.rabbitmq-http.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.rabbitmq-http.rule=Host(`${CONTROLLER_RABBITMQ_MGMT_HOSTNAME}`)"
       - "traefik.http.routers.rabbitmq-http.service=rabbitmq-https"
       - "traefik.http.routers.rabbitmq-http.middlewares=rabbitmq-http-redirect@docker"
       - "traefik.http.middlewares.rabbitmq-http-redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.rabbitmq-https.entrypoints=https"
-      - "traefik.http.routers.rabbitmq-https.rule=Host(`${RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.rabbitmq-https.rule=Host(`${CONTROLLER_RABBITMQ_MGMT_HOSTNAME}`)"
       - "traefik.http.routers.rabbitmq-https.tls.certResolver=letsencrypt"
       - "traefik.http.routers.rabbitmq-https.service=rabbitmq-https"
-      - "traefik.http.services.rabbitmq-https.loadbalancer.server.port=${RABBITMQ_MGMT_PORT}"
+      - "traefik.http.services.rabbitmq-https.loadbalancer.server.port=${CONTROLLER_RABBITMQ_MGMT_PORT}"
 
   db:
     image: mongo:4.4
