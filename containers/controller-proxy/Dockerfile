@@ -25,6 +25,7 @@ CMD /usr/bin/autossh \
   -o ConnectTimeout=10 \
   -o ServerAliveInterval=20 \
   -o ServerAliveCountMax=3 \
+  -o StrictHostKeyChecking=yes \
   -R *:80:controller:80 \
   -L *:80:backend:80 \
   -R *:${RABBITMQ_PORT}:rabbitmq:5672 \
