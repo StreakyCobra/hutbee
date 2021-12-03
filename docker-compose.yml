@@ -33,6 +33,8 @@ services:
       - "CONTROLLER_RABBITMQ_USERNAME"
       - "CONTROLLER_RABBITMQ_PASSWORD"
       - "CONTROLLER_RABBITMQ_PORT"
+      - "BACKEND_RABBITMQ_USERNAME"
+      - "BACKEND_RABBITMQ_PASSWORD"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"
@@ -44,6 +46,16 @@ services:
       - "traefik.http.routers.backend-https.tls.certResolver=letsencrypt"
       - "traefik.http.routers.backend-https.service=backend-https"
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
+      - "traefik.http.routers.backend-rabbitmq-http.entrypoints=http"
+      - "traefik.http.routers.backend-rabbitmq-http.rule=Host(`${BACKEND_RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.backend-rabbitmq-http.service=backend-rabbitmq-https"
+      - "traefik.http.routers.backend-rabbitmq-http.middlewares=backend-rabbitmq-http-redirect@docker"
+      - "traefik.http.middlewares.backend-rabbitmq-http-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.backend-rabbitmq-https.entrypoints=https"
+      - "traefik.http.routers.backend-rabbitmq-https.rule=Host(`${BACKEND_RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.backend-rabbitmq-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.backend-rabbitmq-https.service=backend-rabbitmq-https"
+      - "traefik.http.services.backend-rabbitmq-https.loadbalancer.server.port=15672"
 
   controller:
     build:
@@ -115,7 +127,16 @@ services:
       - "traefik.http.routers.mongo-express-https.service=mongo-express-https"
       - "traefik.http.services.mongo-express-https.loadbalancer.server.port=8081"
 
+  backend-rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    environment:
+      - "RABBITMQ_DEFAULT_USER=${BACKEND_RABBITMQ_USERNAME}"
+      - "RABBITMQ_DEFAULT_PASS=${BACKEND_RABBITMQ_PASSWORD}"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
 
 volumes:
   mongo-db:
   mongo-configdb:
+  rabbitmq:
