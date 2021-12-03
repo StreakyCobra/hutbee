@@ -46,16 +46,6 @@ services:
       - "traefik.http.routers.backend-https.tls.certResolver=letsencrypt"
       - "traefik.http.routers.backend-https.service=backend-https"
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
-      - "traefik.http.routers.backend-rabbitmq-http.entrypoints=http"
-      - "traefik.http.routers.backend-rabbitmq-http.rule=Host(`${BACKEND_RABBITMQ_MGMT_HOSTNAME}`)"
-      - "traefik.http.routers.backend-rabbitmq-http.service=backend-rabbitmq-https"
-      - "traefik.http.routers.backend-rabbitmq-http.middlewares=backend-rabbitmq-http-redirect@docker"
-      - "traefik.http.middlewares.backend-rabbitmq-http-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.backend-rabbitmq-https.entrypoints=https"
-      - "traefik.http.routers.backend-rabbitmq-https.rule=Host(`${BACKEND_RABBITMQ_MGMT_HOSTNAME}`)"
-      - "traefik.http.routers.backend-rabbitmq-https.tls.certResolver=letsencrypt"
-      - "traefik.http.routers.backend-rabbitmq-https.service=backend-rabbitmq-https"
-      - "traefik.http.services.backend-rabbitmq-https.loadbalancer.server.port=15672"
 
   controller:
     build:
@@ -135,6 +125,18 @@ services:
       - "RABBITMQ_DEFAULT_PASS=${BACKEND_RABBITMQ_PASSWORD}"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend-rabbitmq-http.entrypoints=http"
+      - "traefik.http.routers.backend-rabbitmq-http.rule=Host(`${BACKEND_RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.backend-rabbitmq-http.service=backend-rabbitmq-https"
+      - "traefik.http.routers.backend-rabbitmq-http.middlewares=backend-rabbitmq-http-redirect@docker"
+      - "traefik.http.middlewares.backend-rabbitmq-http-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.backend-rabbitmq-https.entrypoints=https"
+      - "traefik.http.routers.backend-rabbitmq-https.rule=Host(`${BACKEND_RABBITMQ_MGMT_HOSTNAME}`)"
+      - "traefik.http.routers.backend-rabbitmq-https.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.backend-rabbitmq-https.service=backend-rabbitmq-https"
+      - "traefik.http.services.backend-rabbitmq-https.loadbalancer.server.port=15672"
 
 volumes:
   mongo-db:
