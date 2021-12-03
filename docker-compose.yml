@@ -90,7 +90,6 @@ services:
     mem_reservation: 1g
     command: "--wiredTigerCacheSizeGB 1.0"
 
-
   mongo-express:
     image: mongo-express:1.0.0-alpha
     restart: unless-stopped
