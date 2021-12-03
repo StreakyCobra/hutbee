@@ -84,7 +84,7 @@ class Worker(ConsumerMixin):
             )
         ]
 
-    def notify(self, body: Any, message: kombu.Message):
+    def notify(self, body, message):
         """Notify a user."""
         db_user = DB[USERS_COL].find_one({"username": body["username"]})
         user = User.of(db_user)
