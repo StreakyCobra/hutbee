@@ -67,7 +67,7 @@ class Telegram:
             response = requests.get("http://controller/", timeout=5).json()
             temperature = response["indoor"]["temperature"]
             update.message.reply_text(f"Current temperature: {temperature}")
-        except Timeout:
+        except requests.exceptions.Timeout:
             update.message.reply_text("Impossible to get the temperature")
 
     @staticmethod
