@@ -119,10 +119,21 @@ def main():
     updater = Updater(config.TELEGRAM_BOT_TOKEN, use_context=True)
     atexit.register(updater.stop)
 
+    authenticated_chat_ids = {
+        user["telegramId"] for user in DB[USERS_COL].find() if "telegramId" in user
+    }
+    authenticated = Filters.chat(authenticated_chat_ids)
+
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", Telegram.start))
     dp.add_handler(CommandHandler("login", Telegram.login, pass_args=True))
-    dp.add_handler(CommandHandler("temperature", Telegram.temperature))
+    dp.add_handler(
+        CommandHandler(
+            "temperature",
+            Telegram.temperature,
+            filters=authenticated,
+        )
+    )
     dp.add_error_handler(Telegram.error)
 
     updater.start_polling()
