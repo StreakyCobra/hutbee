@@ -25,7 +25,7 @@ from telegram.ext import (
 )
 
 
-class _Telegram:
+class Telegram:
     @staticmethod
     def start(update: Update, context: CallbackContext):
         """Send a message when the command /start is issued."""
@@ -101,10 +101,10 @@ def main():
     atexit.register(updater.stop)
 
     dp = updater.dispatcher
-    dp.add_handler(CommandHandler("start", _Telegram.start))
-    dp.add_handler(CommandHandler("login", _Telegram.login, pass_args=True))
-    dp.add_handler(MessageHandler(Filters.text, _Telegram.echo))
-    dp.add_error_handler(_Telegram.error)
+    dp.add_handler(CommandHandler("start", Telegram.start))
+    dp.add_handler(CommandHandler("login", Telegram.login, pass_args=True))
+    dp.add_handler(MessageHandler(Filters.text, Telegram.echo))
+    dp.add_error_handler(Telegram.error)
 
     updater.start_polling()
     user = os.environ["BACKEND_RABBITMQ_USERNAME"]
