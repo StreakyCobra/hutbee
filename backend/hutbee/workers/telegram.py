@@ -5,6 +5,7 @@
 import atexit
 import os
 import time
+from functools import wraps
 
 import kombu
 import requests
@@ -16,7 +17,7 @@ from hutbee.auth import User
 from hutbee.config import USERS_COL
 from hutbee.db import DB
 from hutbee.models.user import User
-from telegram import Update
+from telegram import ChatAction, Update
 from telegram.ext import (
     CallbackContext,
     CommandHandler,
@@ -24,6 +25,17 @@ from telegram.ext import (
     MessageHandler,
     Updater,
 )
+
+
+def send_typing_action(func):
+    @wraps(func)
+    def command_func(update, context, *args, **kwargs):
+        context.bot.send_chat_action(
+            chat_id=update.effective_message.chat_id, action=ChatAction.TYPING
+        )
+        return func(update, context, *args, **kwargs)
+
+    return command_func
 
 
 class Telegram:
@@ -61,6 +73,7 @@ class Telegram:
         )
 
     @staticmethod
+    @send_typing_action
     def temperature(update: Update, context: CallbackContext):
         """Return the temperature."""
         try:
