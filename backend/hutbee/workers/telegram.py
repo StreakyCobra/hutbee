@@ -113,6 +113,7 @@ def main():
     dp.add_error_handler(Telegram.error)
 
     updater.start_polling()
+
     user = os.environ["BACKEND_RABBITMQ_USERNAME"]
     password = os.environ["BACKEND_RABBITMQ_PASSWORD"]
     uri = f"amqp://{user}:{password}@backend-rabbitmq:5672"
