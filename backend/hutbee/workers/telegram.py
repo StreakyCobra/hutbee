@@ -110,17 +110,17 @@ def main():
     user = os.environ["BACKEND_RABBITMQ_USERNAME"]
     password = os.environ["BACKEND_RABBITMQ_PASSWORD"]
     uri = f"amqp://{user}:{password}@backend-rabbitmq:5672"
-    queue = kombu.Queue("notify.telegram")
+    queue = kombu.Queue("notifications.telegram")
 
     while True:
         try:
             with kombu.Connection(uri) as connection:
                 with connection.channel() as channel:
                     queue.declare(channel=channel)
-                    queue.bind_to("notify", channel=channel)
                 worker = Worker(connection, queue, updater)
                 worker.run()
         except ConnectionError:
+            logger.warning("Connection to rabbitmq failed")
         time.sleep(60)
 
 
