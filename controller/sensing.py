@@ -24,7 +24,7 @@ def measure_indoor():
             "humidity": measurement[2],
         }
     else:
-        raise None
+        return None
 
 
 @APP.route("/")
