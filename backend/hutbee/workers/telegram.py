@@ -7,6 +7,7 @@ import os
 import time
 
 import kombu
+import requests
 from kombu.mixins import ConsumerMixin
 from logzero import logger
 
@@ -60,9 +61,14 @@ class Telegram:
         )
 
     @staticmethod
-    def echo(update: Update, context: CallbackContext):
-        """Echo the user message."""
-        update.message.reply_text(update.message.text)
+    def temperature(update: Update, context: CallbackContext):
+        """Return the temperature."""
+        try:
+            response = requests.get("http://controller/", timeout=5).json()
+            temperature = response["indoor"]["temperature"]
+            update.message.reply_text(f"Current temperature: {temperature}")
+        except Timeout:
+            update.message.reply_text("Impossible to get the temperature")
 
     @staticmethod
     def error(update: Update, context: CallbackContext):
@@ -103,7 +109,7 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", Telegram.start))
     dp.add_handler(CommandHandler("login", Telegram.login, pass_args=True))
-    dp.add_handler(MessageHandler(Filters.text, Telegram.echo))
+    dp.add_handler(CommandHandler("temperature", Telegram.temperature))
     dp.add_error_handler(Telegram.error)
 
     updater.start_polling()
