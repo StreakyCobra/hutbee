@@ -79,7 +79,7 @@ class Telegram:
         try:
             response = requests.get("http://controller/", timeout=5).json()
             temperature = response["indoor"]["temperature"]
-            update.message.reply_text(f"Current temperature: {temperature}")
+            update.message.reply_text(f"Current temperature: {temperature:.1f}°C")
         except requests.exceptions.RequestException:
             update.message.reply_text("Impossible to get the temperature")
 
