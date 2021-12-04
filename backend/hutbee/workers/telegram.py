@@ -86,7 +86,6 @@ class Worker(ConsumerMixin):
 
     def notify(self, body, message):
         """Notify a user."""
-        logger.info("message received")
         db_user = DB[USERS_COL].find_one({"username": body["username"]})
         user = User.of(db_user)
         self.updater.bot.send_message(
@@ -107,9 +106,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.text, _Telegram.echo))
     dp.add_error_handler(_Telegram.error)
 
-    logger.info("telegram bot ready")
     updater.start_polling()
-    logger.info("prepare the consummer")
     user = os.environ["BACKEND_RABBITMQ_USERNAME"]
     password = os.environ["BACKEND_RABBITMQ_PASSWORD"]
     uri = f"amqp://{user}:{password}@backend-rabbitmq:5672"
@@ -120,14 +117,10 @@ def main():
             with kombu.Connection(uri) as connection:
                 with connection.channel() as channel:
                     queue.declare(channel=channel)
-                    logger.info("queue declared")
                     queue.bind_to("notify", channel=channel)
-                    logger.info("queue bound")
-                logger.info("start the consummer")
                 worker = Worker(connection, queue, updater)
                 worker.run()
         except ConnectionError:
-            logger.warning("Connection to rabbitmq failed")
         time.sleep(60)
 
 
