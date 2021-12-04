@@ -112,7 +112,7 @@ def main():
     logger.info("prepare the consummer")
     user = os.environ["BACKEND_RABBITMQ_USERNAME"]
     password = os.environ["BACKEND_RABBITMQ_PASSWORD"]
-    uri = f"amqp://{user}:{password}@backend:5672"
+    uri = f"amqp://{user}:{password}@backend-rabbitmq:5672"
     queue = kombu.Queue("notify.telegram")
 
     while True:
