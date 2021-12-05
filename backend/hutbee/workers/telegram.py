@@ -17,7 +17,7 @@ from hutbee.auth import User
 from hutbee.config import USERS_COL
 from hutbee.db import DB
 from hutbee.models.user import User
-from telegram import ChatAction, Update, ParseMode
+from telegram import ChatAction, ParseMode, Update
 from telegram.ext import (
     CallbackContext,
     CommandHandler,
@@ -25,6 +25,7 @@ from telegram.ext import (
     MessageHandler,
     Updater,
 )
+from telegram.utils.helpers import escape_markdown
 
 
 def send_typing_action(func):
@@ -79,10 +80,13 @@ class Telegram:
         try:
             values = requests.get("http://controller/", timeout=5).json()["indoor"]
             update.message.reply_text(
-                f"Current measurements:\n"
-                f'  - Temperature: {values["temperature"]:.1f} °C\n'
-                f'  - Humidity: {values["humidity"]:.0f} %\n'
-                f'  - CO₂: {values["co2"]:.0f} ppm',
+                escape_markdown(
+                    f"Current measurements:\n"
+                    f'  - Temperature: {values["temperature"]:.1f} °C\n'
+                    f'  - Humidity: {values["humidity"]:.0f} %\n'
+                    f'  - CO₂: {values["co2"]:.0f} ppm',
+                    version=2,
+                ),
                 parse_mode=ParseMode.MARKDOWN_V2,
             )
         except requests.exceptions.RequestException:
