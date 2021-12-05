@@ -74,14 +74,18 @@ class Telegram:
 
     @staticmethod
     @send_typing_action
-    def temperature(update: Update, context: CallbackContext):
-        """Return the temperature."""
+    def measurements(update: Update, context: CallbackContext):
+        """Return the indoor measurements."""
         try:
-            response = requests.get("http://controller/", timeout=5).json()
-            temperature = response["indoor"]["temperature"]
-            update.message.reply_text(f"Current temperature: {temperature:.1f}°C")
+            values = requests.get("http://controller/", timeout=5).json()["indoor"]
+            update.message.reply_text(
+                f"Current measurements:\n"
+                f'\tTemperature: {values["temperature"]:.1f} °C\n'
+                f'\tHumidity: {values["humidity"]:d} %\n'
+                f'\tCO₂: {values["co2"]:d} ppm'
+            )
         except requests.exceptions.RequestException:
-            update.message.reply_text("Impossible to get the temperature")
+            update.message.reply_text("Impossible to get the measurements")
 
     @staticmethod
     def error(update: Update, context: CallbackContext):
@@ -129,8 +133,8 @@ def main():
     dp.add_handler(CommandHandler("login", Telegram.login, pass_args=True))
     dp.add_handler(
         CommandHandler(
-            "temperature",
-            Telegram.temperature,
+            "measurements",
+            Telegram.measurements,
             filters=authenticated,
         )
     )
