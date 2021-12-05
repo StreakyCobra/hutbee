@@ -25,7 +25,6 @@ from telegram.ext import (
     MessageHandler,
     Updater,
 )
-from telegram.utils.helpers import escape_markdown
 
 
 def send_typing_action(func):
@@ -80,15 +79,12 @@ class Telegram:
         try:
             values = requests.get("http://controller/", timeout=5).json()["indoor"]
             update.message.reply_text(
-                escape_markdown(
-                    f"Current measurements:\n"
-                    f"```"
-                    f'    Temperature: {values["temperature"]:.1f} °C\n'
-                    f'    Humidity:    {values["humidity"]:.0f} %\n'
-                    f'    CO₂:         {values["co2"]:.0f} ppm'
-                    f"```",
-                    version=2,
-                ),
+                f"Current measurements:\n"
+                f"```"
+                f'    Temperature: {values["temperature"]:.1f} °C\n'
+                f'    Humidity:    {values["humidity"]:.0f} %\n'
+                f'    CO₂:         {values["co2"]:.0f} ppm'
+                f"```",
                 parse_mode=ParseMode.MARKDOWN_V2,
             )
         except requests.exceptions.RequestException:
