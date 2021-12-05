@@ -82,9 +82,11 @@ class Telegram:
             update.message.reply_text(
                 escape_markdown(
                     f"Current measurements:\n"
-                    f'  - Temperature: {values["temperature"]:.1f} °C\n'
-                    f'  - Humidity: {values["humidity"]:.0f} %\n'
-                    f'  - CO₂: {values["co2"]:.0f} ppm',
+                    f"```"
+                    f'    Temperature: {values["temperature"]:.1f} °C\n'
+                    f'    Humidity:    {values["humidity"]:.0f} %\n'
+                    f'    CO₂:         {values["co2"]:.0f} ppm'
+                    f"```",
                     version=2,
                 ),
                 parse_mode=ParseMode.MARKDOWN_V2,
