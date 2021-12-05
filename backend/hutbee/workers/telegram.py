@@ -81,8 +81,8 @@ class Telegram:
             update.message.reply_text(
                 f"Current measurements:\n"
                 f'\tTemperature: {values["temperature"]:.1f} °C\n'
-                f'\tHumidity: {values["humidity"]:d} %\n'
-                f'\tCO₂: {values["co2"]:d} ppm'
+                f'\tHumidity: {values["humidity"]:.0f} %\n'
+                f'\tCO₂: {values["co2"]:.0f} ppm'
             )
         except requests.exceptions.RequestException:
             update.message.reply_text("Impossible to get the measurements")
