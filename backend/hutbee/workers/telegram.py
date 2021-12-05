@@ -17,7 +17,7 @@ from hutbee.auth import User
 from hutbee.config import USERS_COL
 from hutbee.db import DB
 from hutbee.models.user import User
-from telegram import ChatAction, Update
+from telegram import ChatAction, Update, ParseMode
 from telegram.ext import (
     CallbackContext,
     CommandHandler,
@@ -80,9 +80,10 @@ class Telegram:
             values = requests.get("http://controller/", timeout=5).json()["indoor"]
             update.message.reply_text(
                 f"Current measurements:\n"
-                f'\tTemperature: {values["temperature"]:.1f} °C\n'
-                f'\tHumidity: {values["humidity"]:.0f} %\n'
-                f'\tCO₂: {values["co2"]:.0f} ppm'
+                f'  - Temperature: {values["temperature"]:.1f} °C\n'
+                f'  - Humidity: {values["humidity"]:.0f} %\n'
+                f'  - CO₂: {values["co2"]:.0f} ppm',
+                parse_mode=ParseMode.MARKDOWN_V2,
             )
         except requests.exceptions.RequestException:
             update.message.reply_text("Impossible to get the measurements")
