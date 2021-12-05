@@ -22,8 +22,9 @@ RUN mkdir /etc/uwsgi/
 COPY containers/backend/uwsgi.ini /etc/uwsgi/uwsgi.ini
 
 # Prepare the app at build time
+COPY backend/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
 COPY backend /app
-RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Fix permissions
 RUN chown www-data:www-data -R /app
