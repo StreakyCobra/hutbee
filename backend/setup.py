@@ -22,6 +22,7 @@ setup(
         "pymongo~=3.9",
         "python-dotenv~=0.10",
         "python-telegram-bot~=13.8",
+        "pytz~=2021.3",
         "requests~=2.22",
     ],
 )

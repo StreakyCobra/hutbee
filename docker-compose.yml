@@ -35,6 +35,7 @@ services:
       - "CONTROLLER_RABBITMQ_PORT"
       - "BACKEND_RABBITMQ_USERNAME"
       - "BACKEND_RABBITMQ_PASSWORD"
+      - "DISPLAY_TIMEZONE"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-http.entrypoints=http"

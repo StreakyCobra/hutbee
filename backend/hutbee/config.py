@@ -2,6 +2,7 @@
 """Hutbee configuration."""
 
 import os
+import pytz
 
 from dotenv import load_dotenv
 
@@ -46,6 +47,9 @@ JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
 
 TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
 """Token of the telegram bot."""
+
+DISPLAY_TIMEZONE = pytz.timezone(os.environ["DISPLAY_TIMEZONE"])
+"""The timezone in which to display datetime information."""
 
 
 # --------------------------------------------------------------------------- #
