@@ -19,10 +19,12 @@ setup(
         "flask~=1.1",
         "kombu~=5.0.1",
         "logzero~=1.5",
+        "pandas~=1.3.5",
         "pymongo~=3.9",
         "python-dotenv~=0.10",
         "python-telegram-bot~=13.8",
         "pytz~=2021.3",
         "requests~=2.22",
+        "seaborn~=0.11",
     ],
 )

@@ -5,6 +5,7 @@
 import atexit
 import os
 import time
+from datetime import datetime, timedelta
 from functools import wraps
 
 import kombu
@@ -14,9 +15,10 @@ from logzero import logger
 
 from hutbee import auth, config
 from hutbee.auth import User
-from hutbee.config import USERS_COL
+from hutbee.config import USERS_COL, MEASUREMENTS_COL
 from hutbee.db import DB
 from hutbee.models.user import User
+from hutbee import dataprocessing
 from telegram import ChatAction, ParseMode, Update
 from telegram.ext import (
     CallbackContext,
@@ -91,6 +93,14 @@ class Telegram:
             update.message.reply_text("Impossible to get the measurements")
 
     @staticmethod
+    @send_typing_action
+    def history(update: Update, context: CallbackContext):
+        """Send the latest 24 hours indoor plot."""
+        one_day_ago = datetime.now() - timedelta(hours=24)
+        data = DB[MEASUREMENTS_COL].find({"date": {"$gte": one_day_ago.isoformat()}})
+        update.message.reply_photo(dataprocessing.history_plot(data))
+
+    @staticmethod
     def error(update: Update, context: CallbackContext):
         """Log Errors caused by Updates."""
         logger.error('Telegram: update "%s" caused error "%s"', update, context.error)
@@ -138,6 +148,13 @@ def main():
         CommandHandler(
             "measurements",
             Telegram.measurements,
+            filters=authenticated,
+        )
+    )
+    dp.add_handler(
+        CommandHandler(
+            "history",
+            Telegram.history,
             filters=authenticated,
         )
     )
