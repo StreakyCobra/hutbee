@@ -75,7 +75,7 @@ class Telegram:
     @staticmethod
     @send_typing_action
     def measurements(update: Update, context: CallbackContext):
-        """Return the indoor measurements."""
+        """Send the indoor measurements."""
         try:
             values = requests.get("http://controller/", timeout=5).json()["indoor"]
             update.message.reply_text(
