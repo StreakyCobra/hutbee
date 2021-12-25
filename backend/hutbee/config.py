@@ -23,7 +23,7 @@ def bool_of(value: str) -> bool:
 
 
 # --------------------------------------------------------------------------- #
-# Hutbee parameters                                                           #
+# BACKEND CONFIGURATION                                                       #
 # --------------------------------------------------------------------------- #
 
 HOST = os.environ.get("HUTBEE_HOST", "0.0.0.0")
@@ -40,6 +40,12 @@ DEBUG = bool_of(os.environ.get("HUTBEE_DEBUG", not PRODUCTION))
 
 CONTROLLER_HOSTNAME = os.environ["CONTROLLER_HOSTNAME"]
 """The hostname to access the controller API."""
+
+JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
+"""Secret key to sign JWTs."""
+
+TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+"""Token of the telegram bot."""
 
 
 # --------------------------------------------------------------------------- #
@@ -63,7 +69,7 @@ MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD", None)
 
 
 # --------------------------------------------------------------------------- #
-# MONGO COLLECTION                                                            #
+# MONGO COLLECTIONS                                                           #
 # --------------------------------------------------------------------------- #
 
 USERS_COL = "users"
@@ -77,19 +83,3 @@ HEALTHCHECKS_COL = "healthchecks"
 
 MEASUREMENTS_COL = "measurements"
 """Name of the measurements collection in the database."""
-
-
-# --------------------------------------------------------------------------- #
-# AUTHENTICATION                                                              #
-# --------------------------------------------------------------------------- #
-
-JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
-"""Secret key to sign JWTs."""
-
-
-# --------------------------------------------------------------------------- #
-# TELEGRAM                                                                    #
-# --------------------------------------------------------------------------- #
-
-TELEGRAM_BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-"""Token of the telegram bot."""
