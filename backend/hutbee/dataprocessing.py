@@ -56,7 +56,6 @@ def history_plot(cursor: Cursor) -> io.BytesIO:
         data=data,
         x="date",
         y="temperature",
-        label="Temperature",
         color=colors[0],
         ax=ax1,
     )
@@ -64,7 +63,6 @@ def history_plot(cursor: Cursor) -> io.BytesIO:
         data=data,
         x="date",
         y="co2",
-        label="CO₂",
         color=colors[1],
         ax=ax2,
     )
@@ -72,7 +70,6 @@ def history_plot(cursor: Cursor) -> io.BytesIO:
         data=data,
         x="date",
         y="humidity",
-        label="Humidity",
         color=colors[2],
         ax=ax3,
     )
@@ -95,16 +92,10 @@ def history_plot(cursor: Cursor) -> io.BytesIO:
         ax.grid(which="minor", linestyle=":", linewidth="0.4", color="#aaa")
 
     # Axes labels
-    for ax in axes:
-        ax.set_ylabel("")
+    ax1.set_ylabel("Temperature")
+    ax2.set_ylabel("CO₂")
+    ax3.set_ylabel("Humidity")
     ax3.set_xlabel("")
-
-    # Legend
-    lns = [l for ax in axes for l in ax.lines]
-    labs = [l.get_label() for l in lns]
-    ax1.legend(lns, labs, loc=1)
-    ax2.legend().remove()
-    ax3.legend().remove()
 
     # CO₂ indications
     lim2 = ax2.get_ylim()
