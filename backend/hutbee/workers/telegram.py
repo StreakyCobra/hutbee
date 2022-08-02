@@ -108,7 +108,7 @@ class Telegram:
     @staticmethod
     def turn_heater_off(update: Update, context: CallbackContext):
         """Turn the heater off."""
-        update.message.reply_photo("Not implemented")
+        update.message.reply_text("Not implemented")
 
     @staticmethod
     def error(update: Update, context: CallbackContext):
