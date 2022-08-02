@@ -11,36 +11,36 @@ APP = Flask(__name__)
 client = ModbusTcpClient(os.environ["MODBUS_SERVER_HOST"])
 
 
-@APP.route("/heater", methods=["GET"])
-def heater_status():
-    """Turn the heater on."""
+@APP.route("/heating", methods=["GET"])
+def heating_status():
+    """Turn the heating on."""
     try:
         coils = client.read_coils(80, 8).bits
         heater = "ON" if coils[1] else "OFF"
         pump = "ON" if coils[2] else "OFF"
         return jsonify(heater=heater, pump=pump)
     except:
-        return make_response(jsonify(message="Can not access the heater status"), 400)
+        return make_response(jsonify(message="Can not access the heating status"), 400)
 
 
-@APP.route("/heater/on", methods=["POST"])
-def turn_heater_on():
-    """Turn the heater on."""
+@APP.route("/heating/on", methods=["POST"])
+def turn_heating_on():
+    """Turn the heating on."""
     try:
         coils = client.write_coil(1, 1)
-        return jsonify(message="The heater has been turned ON.")
+        return jsonify(message="The heating has been turned ON.")
     except:
-        return make_response(jsonify(message="Can not turn ON the heater"), 400)
+        return make_response(jsonify(message="Can not turn ON the heating"), 400)
 
 
-@APP.route("/heater/off", methods=["POST"])
-def turn_heater_off():
-    """Turn the heater off."""
+@APP.route("/heating/off", methods=["POST"])
+def turn_heating_off():
+    """Turn the heating off."""
     try:
         coils = client.write_coil(1, 0)
-        return jsonify(message="The heater has been turned OFF.")
+        return jsonify(message="The heating has been turned OFF.")
     except:
-        return make_response(jsonify(message="Can not turn OFF the heater"), 400)
+        return make_response(jsonify(message="Can not turn OFF the heating"), 400)
 
 
 def main():

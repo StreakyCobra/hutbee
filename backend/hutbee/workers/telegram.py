@@ -102,32 +102,32 @@ class Telegram:
 
     @staticmethod
     @send_typing_action
-    def heater_status(update: Update, context: CallbackContext):
-        """Turn the heater on."""
+    def heating_status(update: Update, context: CallbackContext):
+        """Turn the heating on."""
         try:
-            response = requests.get("http://controller/heater", timeout=5)
+            response = requests.get("http://controller/heating", timeout=5)
             status = response.json()["status"]
-            update.message.reply_text(f"The heater status is: {status}")
+            update.message.reply_text(f"The heating status is: {status}")
         except requests.exceptions.RequestException:
             update.message.reply_text("Error when trying to contact the controller")
 
     @staticmethod
     @send_typing_action
-    def turn_heater_on(update: Update, context: CallbackContext):
-        """Turn the heater on."""
+    def turn_heating_on(update: Update, context: CallbackContext):
+        """Turn the heating on."""
         try:
-            requests.post("http://controller/heater/on", timeout=5)
-            update.message.reply_text("The heater has been turned on")
+            requests.post("http://controller/heating/on", timeout=5)
+            update.message.reply_text("The heating has been turned on")
         except requests.exceptions.RequestException:
             update.message.reply_text("Error when trying to contact the controller")
 
     @staticmethod
     @send_typing_action
-    def turn_heater_off(update: Update, context: CallbackContext):
-        """Turn the heater off."""
+    def turn_heating_off(update: Update, context: CallbackContext):
+        """Turn the heating off."""
         try:
-            requests.post("http://controller/heater/off", timeout=5)
-            update.message.reply_text("The heater has been turned off")
+            requests.post("http://controller/heating/off", timeout=5)
+            update.message.reply_text("The heating has been turned off")
         except requests.exceptions.RequestException:
             update.message.reply_text("Error when trying to contact the controller")
 
@@ -175,8 +175,9 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", Telegram.start))
     dp.add_handler(CommandHandler("login", Telegram.login, pass_args=True))
-    dp.add_handler(CommandHandler("turn_heater_on", Telegram.turn_heater_on))
-    dp.add_handler(CommandHandler("turn_heater_off", Telegram.turn_heater_off))
+    dp.add_handler(CommandHandler("heating_status", Telegram.heating_status))
+    dp.add_handler(CommandHandler("turn_heating_on", Telegram.turn_heating_on))
+    dp.add_handler(CommandHandler("turn_heating_off", Telegram.turn_heating_off))
     dp.add_handler(
         CommandHandler(
             "measurements",
