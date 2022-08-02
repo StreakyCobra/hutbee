@@ -101,6 +101,16 @@ class Telegram:
         update.message.reply_photo(dataprocessing.history_plot(data))
 
     @staticmethod
+    def turn_heater_on(update: Update, context: CallbackContext):
+        """Turn the heater on."""
+        update.message.reply_text("Not implemented")
+
+    @staticmethod
+    def turn_heater_off(update: Update, context: CallbackContext):
+        """Turn the heater off."""
+        update.message.reply_photo("Not implemented")
+
+    @staticmethod
     def error(update: Update, context: CallbackContext):
         """Log Errors caused by Updates."""
         logger.error('Telegram: update "%s" caused error "%s"', update, context.error)
@@ -144,6 +154,8 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", Telegram.start))
     dp.add_handler(CommandHandler("login", Telegram.login, pass_args=True))
+    dp.add_handler(CommandHandler("turn_heater_on", Telegram.turn_heater_on))
+    dp.add_handler(CommandHandler("turn_heater_off", Telegram.turn_heater_off))
     dp.add_handler(
         CommandHandler(
             "measurements",
