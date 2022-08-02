@@ -39,12 +39,14 @@ def main():
     port = os.environ["CONTROLLER_RABBITMQ_PORT"]
     uri = f"amqp://{user}:{password}@controller:{port}"
     queue = kombu.Queue("measurements.persist")
+    exchange = kombu.Exchange("measurements")
 
     while True:
         try:
             with kombu.Connection(uri) as connection:
                 with connection.channel() as channel:
                     queue.declare(channel=channel)
+                    exchange.declare(channel=channel)
                     queue.bind_to("measurements", channel=channel)
                 worker = Worker(connection, queue)
                 worker.run()
