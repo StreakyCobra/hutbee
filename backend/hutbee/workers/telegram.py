@@ -105,9 +105,15 @@ class Telegram:
     def heating_status(update: Update, context: CallbackContext):
         """Turn the heating on."""
         try:
-            response = requests.get("http://controller/heating", timeout=5)
-            status = response.json()["status"]
-            update.message.reply_text(f"The heating status is: {status}")
+            response = requests.get("http://controller/heating", timeout=5).json()
+            update.message.reply_text(
+                f"Heating status:\n"
+                f"```"
+                f'    Heater:  {response["heater"]}\n'
+                f'    Pump:    {response["pump"]}\n'
+                f"```",
+                parse_mode=ParseMode.MARKDOWN_V2,
+            )
         except requests.exceptions.RequestException:
             update.message.reply_text("Error when trying to contact the controller")
 
