@@ -44,8 +44,7 @@ services:
     image: rabbitmq:3-management
     restart: unless-stopped
     environment:
-      - "RABBITMQ_DEFAULT_USER=${CONTROLLER_RABBITMQ_USERNAME}"
-      - "RABBITMQ_DEFAULT_PASS=${CONTROLLER_RABBITMQ_PASSWORD}"
+      - "MODBUS_SERVER_HOST=${MODBUS_SERVER_HOST}"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
 

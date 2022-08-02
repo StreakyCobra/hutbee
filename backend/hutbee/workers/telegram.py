@@ -101,14 +101,35 @@ class Telegram:
         update.message.reply_photo(dataprocessing.history_plot(data))
 
     @staticmethod
-    def turn_heater_on(update: Update, context: CallbackContext):
+    @send_typing_action
+    def heater_status(update: Update, context: CallbackContext):
         """Turn the heater on."""
-        update.message.reply_text("Not implemented")
+        try:
+            response = requests.get("http://controller/heater", timeout=5)
+            status = response.json()["status"]
+            update.message.reply_text(f"The heater status is: {status}")
+        except requests.exceptions.RequestException:
+            update.message.reply_text("Error when trying to contact the controller")
 
     @staticmethod
+    @send_typing_action
+    def turn_heater_on(update: Update, context: CallbackContext):
+        """Turn the heater on."""
+        try:
+            requests.post("http://controller/heater/on", timeout=5)
+            update.message.reply_text("The heater has been turned on")
+        except requests.exceptions.RequestException:
+            update.message.reply_text("Error when trying to contact the controller")
+
+    @staticmethod
+    @send_typing_action
     def turn_heater_off(update: Update, context: CallbackContext):
         """Turn the heater off."""
-        update.message.reply_text("Not implemented")
+        try:
+            requests.post("http://controller/heater/off", timeout=5)
+            update.message.reply_text("The heater has been turned off")
+        except requests.exceptions.RequestException:
+            update.message.reply_text("Error when trying to contact the controller")
 
     @staticmethod
     def error(update: Update, context: CallbackContext):
