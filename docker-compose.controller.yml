@@ -45,6 +45,8 @@ services:
     environment:
       - "RABBITMQ_DEFAULT_USER=${CONTROLLER_RABBITMQ_USERNAME}"
       - "RABBITMQ_DEFAULT_PASS=${CONTROLLER_RABBITMQ_PASSWORD}"
+    ports:
+      - "${CONTROLLER_RABBITMQ_EXTERNAL_PORT}:5672"
     volumes:
       - rabbitmq:/var/lib/rabbitmq
 
