@@ -9,22 +9,21 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 import kombu
+import pytz
 import requests
 from kombu.mixins import ConsumerMixin
 from logzero import logger
 
-from hutbee import auth, config
+from hutbee import auth, config, dataprocessing
 from hutbee.auth import User
-from hutbee.config import USERS_COL, MEASUREMENTS_COL
+from hutbee.config import DISPLAY_TIMEZONE, MEASUREMENTS_COL, USERS_COL
 from hutbee.db import DB
 from hutbee.models.user import User
-from hutbee import dataprocessing
 from telegram import ChatAction, ParseMode, Update
 from telegram.ext import (
     CallbackContext,
     CommandHandler,
     Filters,
-    MessageHandler,
     Updater,
 )
 
@@ -79,9 +78,20 @@ class Telegram:
     def measurements(update: Update, context: CallbackContext):
         """Send the indoor measurements."""
         try:
-            values = requests.get("http://controller/", timeout=5).json()["indoor"]
+            last = list(
+                DB[MEASUREMENTS_COL].aggregate(
+                    [
+                        {"$sort": {"date": -1}},
+                        {"$limit": 1},
+                    ]
+                )
+            )[0]
+            values = last["values"]
+            timestamp = datetime.fromisoformat(last["date"]).astimezone(
+                DISPLAY_TIMEZONE
+            )
             update.message.reply_text(
-                f"Current measurements:\n"
+                f"Measurements at {timestamp.strftime('%Y-%m-%d, %H:%M')}:\n"
                 f"```"
                 f'    Temperature: {values["temperature"]:.1f} °C\n'
                 f'    Humidity:    {values["humidity"]:.0f} %\n'
