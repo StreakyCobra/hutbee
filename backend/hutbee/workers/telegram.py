@@ -87,11 +87,13 @@ class Telegram:
                 )
             )[0]
             values = last["values"]
-            timestamp = datetime.fromisoformat(last["date"]).astimezone(
-                DISPLAY_TIMEZONE
+            timestamp = (
+                datetime.fromisoformat(last["date"])
+                .astimezone(DISPLAY_TIMEZONE)
+                .strftime("%Y\-%m\-%d, %H:%M")
             )
             update.message.reply_text(
-                f"Measurements at {timestamp.strftime('%Y-%m-%d, %H:%M')}:\n"
+                f"Measurements at {timestamp}:\n"
                 f"```"
                 f'    Temperature: {values["temperature"]:.1f} °C\n'
                 f'    Humidity:    {values["humidity"]:.0f} %\n'
