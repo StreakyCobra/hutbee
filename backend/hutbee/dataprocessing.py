@@ -82,9 +82,9 @@ def history_plot(cursor: Cursor) -> io.BytesIO:
         item.set_rotation(90)
 
     # Y ticks
-    ax1.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x} °C"))
+    ax1.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.2f} °C"))
     ax2.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.0f} ppm"))
-    ax3.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x} %"))
+    ax3.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.2f} %"))
 
     # Grids
     for ax in axes:
