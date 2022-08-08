@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
+import time
 from contextlib import contextmanager
 from threading import Thread
 
@@ -27,7 +28,9 @@ class ModbusWorker(Thread):
 
     def execute(self, args):
         command = args.get("command")
-        if command == "heating_status":
+        if command == "set_watchdog":
+            return self.set_watchdog(args["value"])
+        elif command == "heating_status":
             return self.heating_status()
         elif command == "turn_heating_on":
             return self.turn_heating_on()
@@ -35,6 +38,16 @@ class ModbusWorker(Thread):
             return self.turn_heating_off()
         else:
             return {"content": {"message": "Unknown command"}, "status": 400}
+
+    def set_watchdog(self, value):
+        try:
+            self.client.write_coil(0, int(value))
+            return {"content": {"message": "The watchdog has been set"}, "status": 200}
+        except:
+            return {
+                "content": {"message": "Can **NOT** set the watchdog"},
+                "status": 400,
+            }
 
     def heating_status(self):
         try:
@@ -112,9 +125,23 @@ def turn_heating_off():
         return make_response(response["content"], response["status"])
 
 
+def watchdog():
+    state = True
+    with channel() as socket:
+        state = not state
+        socket.send_json({"command": "set_watchdog", "value": state})
+        socket.recv_json()
+        time.sleep(1)
+
+
 def main():
     worker = ModbusWorker()
     worker.start()
+
+    thread = Thread(target=watchdog)
+    thread.daemon = True
+    thread.start()
+
     APP.run(host="0.0.0.0", port="80")
 
 
