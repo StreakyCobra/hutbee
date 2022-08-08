@@ -128,10 +128,11 @@ def turn_heating_off():
 def watchdog():
     state = True
     with channel() as socket:
-        state = not state
-        socket.send_json({"command": "set_watchdog", "value": state})
-        socket.recv_json()
-        time.sleep(1)
+        while True:
+            state = not state
+            socket.send_json({"command": "set_watchdog", "value": state})
+            socket.recv_json()
+            time.sleep(1)
 
 
 def main():
