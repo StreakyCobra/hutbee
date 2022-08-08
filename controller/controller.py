@@ -38,7 +38,7 @@ class ModbusWorker(Thread):
 
     def heating_status(self):
         try:
-            coils = client.read_coils(80, 8).bits
+            coils = self.client.read_coils(80, 8).bits
             heater = "ON" if coils[1] else "OFF"
             pump = "ON" if coils[2] else "OFF"
             return {"content": {"heater": heater, "pump": pump}, "status": 200}
@@ -50,7 +50,7 @@ class ModbusWorker(Thread):
 
     def turn_heating_on(self):
         try:
-            client.write_coil(1, 1)
+            self.client.write_coil(1, 1)
             return {
                 "content": {"message": "The heating has been turned **ON**"},
                 "status": 200,
@@ -63,7 +63,7 @@ class ModbusWorker(Thread):
 
     def turn_heating_off(self):
         try:
-            client.write_coil(1, 0)
+            self.client.write_coil(1, 0)
             return {
                 "content": {"message": "The heating has been turned **OFF**"},
                 "status": 200,
