@@ -91,7 +91,7 @@ def heating_status():
     with channel() as socket:
         socket.send_json({"command": "heating_status"})
         response = socket.recv_json()
-        return make_response(response.content, response.status)
+        return make_response(response["content"], response["status"])
 
 
 @APP.route("/heating/on", methods=["POST"])
@@ -100,7 +100,7 @@ def turn_heating_on():
     with channel() as socket:
         socket.send_json({"command": "turn_heating_on"})
         response = socket.recv_json()
-        return make_response(response.content, response.status)
+        return make_response(response["content"], response["status"])
 
 
 @APP.route("/heating/off", methods=["POST"])
@@ -109,7 +109,7 @@ def turn_heating_off():
     with channel() as socket:
         socket.send_json({"command": "turn_heating_off"})
         response = socket.recv_json()
-        return make_response(response.content, response.status)
+        return make_response(response["content"], response["status"])
 
 
 def main():
