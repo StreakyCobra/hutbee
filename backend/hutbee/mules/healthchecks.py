@@ -32,7 +32,7 @@ class _Message:
 def _healthcheck():
     """Do a healthcheck."""
     try:
-        response = requests.get("http://" + config.CONTROLLER_HOSTNAME)
+        response = requests.get("http://controller")
     except:
         response = None
 

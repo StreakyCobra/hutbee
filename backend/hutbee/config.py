@@ -39,9 +39,6 @@ PRODUCTION = bool_of(os.environ.get("HUTBEE_PRODUCTION", False))
 DEBUG = bool_of(os.environ.get("HUTBEE_DEBUG", not PRODUCTION))
 """Whether the debug mode is enabled."""
 
-CONTROLLER_HOSTNAME = os.environ["CONTROLLER_HOSTNAME"]
-"""The hostname to access the controller API."""
-
 JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
 """Secret key to sign JWTs."""
 

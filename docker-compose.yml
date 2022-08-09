@@ -22,7 +22,6 @@ services:
     restart: unless-stopped
     environment:
       - "HUTBEE_PRODUCTION=true"
-      - "CONTROLLER_HOSTNAME"
       - "MONGO_DB_NAME"
       - "MONGO_HOST"
       - "MONGO_PORT"
@@ -60,16 +59,6 @@ services:
       - "${CONTROLLER_SSH_PORT}:${CONTROLLER_SSH_PORT}"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.controller-http.entrypoints=http"
-      - "traefik.http.routers.controller-http.rule=Host(`${CONTROLLER_HOSTNAME}`)"
-      - "traefik.http.routers.controller-http.service=controller-https"
-      - "traefik.http.routers.controller-http.middlewares=controller-http-redirect@docker"
-      - "traefik.http.middlewares.controller-http-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.controller-https.entrypoints=https"
-      - "traefik.http.routers.controller-https.rule=Host(`${CONTROLLER_HOSTNAME}`)"
-      - "traefik.http.routers.controller-https.tls.certResolver=letsencrypt"
-      - "traefik.http.routers.controller-https.service=controller-https"
-      - "traefik.http.services.controller-https.loadbalancer.server.port=80"
       - "traefik.http.routers.controller-rabbitmq-http.entrypoints=http"
       - "traefik.http.routers.controller-rabbitmq-http.rule=Host(`${CONTROLLER_RABBITMQ_MGMT_HOSTNAME}`)"
       - "traefik.http.routers.controller-rabbitmq-http.service=controller-rabbitmq-https"
