@@ -10,54 +10,63 @@ from hutbee_controller.config import ZMQ_CONTEXT
 class ModbusWorker(Thread):
     def __init__(self):
         Thread.__init__(self)
-        self.client = ModbusTcpClient(os.environ["MODBUS_SERVER_HOST"])
-        self.socket = ZMQ_CONTEXT.socket(zmq.REP)
+        self._client = ModbusTcpClient(os.environ["MODBUS_SERVER_HOST"])
+        self._socket = ZMQ_CONTEXT.socket(zmq.REP)
 
     def run(self):
-        self.socket.bind("inproc://stream")
+        self._socket.bind("inproc://stream")
         while True:
-            args = self.socket.recv_json()
-            result = self.execute(args)
-            self.socket.send_json(result)
+            args = self._socket.recv_json()
+            result = self._execute(args)
+            self._socket.send_json(result)
 
-    def execute(self, args):
+    def _execute(self, args):
         command = args.get("command")
         if command == "set_watchdog":
-            return self.set_watchdog(args["value"])
+            return self._set_watchdog(args["value"])
         elif command == "heating_status":
-            return self.heating_status()
+            return self._heating_status()
         elif command == "turn_heating_on":
-            return self.turn_heating_on()
+            return self._turn_heating_on()
         elif command == "turn_heating_off":
-            return self.turn_heating_off()
+            return self._turn_heating_off()
         else:
-            return {"content": {"message": "Unknown command"}, "status": 400}
-
-    def set_watchdog(self, value):
-        try:
-            self.client.write_coil(0, int(value))
-            return {"content": {"message": "The watchdog has been set"}, "status": 200}
-        except:
             return {
-                "content": {"message": "Can not set the watchdog"},
+                "content": {"message": "Unknown command"},
                 "status": 400,
             }
 
-    def heating_status(self):
+    def _set_watchdog(self, value):
         try:
-            coils = self.client.read_coils(80, 8).bits
+            self._client.write_coil(0, int(value))
+            return {
+                "content": {"message": f"The watchdog has been set to {value}"},
+                "status": 200,
+            }
+        except:
+            return {
+                "content": {"message": f"Can not set the watchdog to {value}"},
+                "status": 400,
+            }
+
+    def _heating_status(self):
+        try:
+            coils = self._client.read_coils(80, 8).bits
             heater = "ON" if coils[1] else "OFF"
             pump = "ON" if coils[2] else "OFF"
-            return {"content": {"heater": heater, "pump": pump}, "status": 200}
+            return {
+                "content": {"heater": heater, "pump": pump},
+                "status": 200,
+            }
         except:
             return {
                 "content": {"message": "Can not access the heating status"},
                 "status": 400,
             }
 
-    def turn_heating_on(self):
+    def _turn_heating_on(self):
         try:
-            self.client.write_coil(1, 1)
+            self._client.write_coil(1, 1)
             return {
                 "content": {"message": "The heating has been turned on"},
                 "status": 200,
@@ -68,9 +77,9 @@ class ModbusWorker(Thread):
                 "status": 400,
             }
 
-    def turn_heating_off(self):
+    def _turn_heating_off(self):
         try:
-            self.client.write_coil(1, 0)
+            self._client.write_coil(1, 0)
             return {
                 "content": {"message": "The heating has been turned off"},
                 "status": 200,
