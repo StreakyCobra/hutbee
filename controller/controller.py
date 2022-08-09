@@ -45,7 +45,7 @@ class ModbusWorker(Thread):
             return {"content": {"message": "The watchdog has been set"}, "status": 200}
         except:
             return {
-                "content": {"message": "Can **NOT** set the watchdog"},
+                "content": {"message": "Can not set the watchdog"},
                 "status": 400,
             }
 
@@ -57,7 +57,7 @@ class ModbusWorker(Thread):
             return {"content": {"heater": heater, "pump": pump}, "status": 200}
         except:
             return {
-                "content": {"message": "Can **NOT** access the heating status"},
+                "content": {"message": "Can not access the heating status"},
                 "status": 400,
             }
 
@@ -65,12 +65,12 @@ class ModbusWorker(Thread):
         try:
             self.client.write_coil(1, 1)
             return {
-                "content": {"message": "The heating has been turned **ON**"},
+                "content": {"message": "The heating has been turned on"},
                 "status": 200,
             }
         except:
             return {
-                "content": {"message": "Can **NOT** turn the heating on"},
+                "content": {"message": "Can not turn the heating on"},
                 "status": 400,
             }
 
@@ -78,12 +78,12 @@ class ModbusWorker(Thread):
         try:
             self.client.write_coil(1, 0)
             return {
-                "content": {"message": "The heating has been turned **OFF**"},
+                "content": {"message": "The heating has been turned off"},
                 "status": 200,
             }
         except:
             return {
-                "content": {"message": "Can **NOT** turn the heating off"},
+                "content": {"message": "Can not turn the heating off"},
                 "status": 400,
             }
 
