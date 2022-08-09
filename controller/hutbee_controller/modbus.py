@@ -22,20 +22,19 @@ class ModbusWorker(Thread):
 
     def _execute(self, args):
         command = args.get("command")
-        match command:
-            case "set_watchdog":
-                return self._set_watchdog(args["value"])
-            case "heating_status":
-                return self._heating_status()
-            case "turn_heating_on":
-                return self._turn_heating_on()
-            case "turn_heating_off":
-                return self._turn_heating_off()
-            case _:
-                return {
-                    "content": {"message": "Unknown command"},
-                    "status": 400,
-                }
+        if command == "set_watchdog":
+            return self._set_watchdog(args["value"])
+        elif command == "heating_status":
+            return self._heating_status()
+        elif command == "turn_heating_on":
+            return self._turn_heating_on()
+        elif command == "turn_heating_off":
+            return self._turn_heating_off()
+        else:
+            return {
+                "content": {"message": "Unknown command"},
+                "status": 400,
+            }
 
     def _set_watchdog(self, value):
         try:

@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.9
 
 RUN echo '[global]\nextra-index-url=https://www.piwheels.org/simple\n' >> /etc/pip.conf
 
