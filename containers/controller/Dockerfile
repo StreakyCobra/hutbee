@@ -8,4 +8,4 @@ RUN pip install -r /tmp/requirements.txt
 COPY controller /app
 WORKDIR /app
 
-CMD python -u controller.py
+CMD python -u -m hubtee_controller
