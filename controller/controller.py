@@ -98,6 +98,20 @@ def channel():
         socket.close()
 
 
+class WatchdogWorker(Thread):
+    def __init__(self):
+        Thread.__init__(self)
+        self.state = False
+
+    def run(self):
+        with channel() as socket:
+            while True:
+                self.state = not self.state
+                socket.send_json({"command": "set_watchdog", "value": self.state})
+                socket.recv_json()
+                time.sleep(1)
+
+
 @APP.route("/healthcheck", methods=["GET"])
 def healtcheck():
     """Healthcheck endpoint."""
@@ -131,23 +145,12 @@ def turn_heating_off():
         return make_response(response["content"], response["status"])
 
 
-def watchdog():
-    state = True
-    with channel() as socket:
-        while True:
-            state = not state
-            socket.send_json({"command": "set_watchdog", "value": state})
-            socket.recv_json()
-            time.sleep(1)
-
-
 def main():
     worker = ModbusWorker()
     worker.start()
 
-    thread = Thread(target=watchdog)
-    thread.daemon = True
-    thread.start()
+    watchdog = WatchdogWorker()
+    watchdog.start()
 
     APP.run(host="0.0.0.0", port="80")
 
