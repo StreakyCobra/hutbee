@@ -98,9 +98,15 @@ def channel():
         socket.close()
 
 
+@APP.route("/healthcheck", methods=["GET"])
+def healtcheck():
+    """Healthcheck endpoint."""
+    return jsonify({"state": "good"})
+
+
 @APP.route("/heating", methods=["GET"])
 def heating_status():
-    """Turn the heating on."""
+    """Get the heating status."""
     with channel() as socket:
         socket.send_json({"command": "heating_status"})
         response = socket.recv_json()
