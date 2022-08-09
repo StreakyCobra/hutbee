@@ -135,7 +135,7 @@ class Telegram:
         """Turn the heating on."""
         try:
             requests.post("http://controller/heating/on", timeout=5)
-            update.message.reply_text("The heating has been turned on")
+            update.message.reply_text("The heating has been turned **ON**")
         except requests.exceptions.RequestException:
             update.message.reply_text("Error when trying to contact the controller")
 
@@ -145,7 +145,7 @@ class Telegram:
         """Turn the heating off."""
         try:
             requests.post("http://controller/heating/off", timeout=5)
-            update.message.reply_text("The heating has been turned off")
+            update.message.reply_text("The heating has been turned **OFF**")
         except requests.exceptions.RequestException:
             update.message.reply_text("Error when trying to contact the controller")
 
