@@ -13,6 +13,9 @@ class ModbusWorker(Thread):
         self._client = ModbusTcpClient(os.environ["MODBUS_SERVER_HOST"])
         self._socket = ZMQ_CONTEXT.socket(zmq.REP)
 
+        # For safety turn it off when restarted
+        self._turn_heating_off()
+
     def run(self):
         self._socket.bind("inproc://stream")
         while True:
