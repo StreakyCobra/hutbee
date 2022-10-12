@@ -14,6 +14,7 @@ class ModbusWorker(Thread):
         self._socket = ZMQ_CONTEXT.socket(zmq.REP)
 
         # For safety turn it off when restarted
+        # (Additional safety in the safety worker)
         self._turn_heating_off()
 
     def run(self):

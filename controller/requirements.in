@@ -1,3 +1,5 @@
 flask~=2.2.0
+kombu~=5.0.1
+logzero~=1.5
 pymodbus==2.5.3
 pyzmq==23.2.0
