@@ -1,3 +1,4 @@
+import os
 import time
 from threading import Thread
 
@@ -5,6 +6,7 @@ import kombu
 import zmq
 from kombu.mixins import ConsumerMixin
 from logzero import logger
+from typing import Any
 
 from hutbee_controller.config import ZMQ_CONTEXT
 
