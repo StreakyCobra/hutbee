@@ -23,7 +23,7 @@ def channel():
 @BP.route("/healthcheck", methods=["GET"])
 def healtcheck():
     """Healthcheck endpoint."""
-    return jsonify({"state": "good"})
+    return jsonify({"state": "healthy"})
 
 
 @BP.route("/heating", methods=["GET"])
