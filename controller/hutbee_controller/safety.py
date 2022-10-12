@@ -26,6 +26,7 @@ class MeasurementConsumer(ConsumerMixin):
 
     def process_measurement(self, body: Any, message: kombu.Message):
         """Store a measurement in the database."""
+        # TODO: Transmit the measurement back to the safety worker
         logger.info(f"Measurement processed")
         message.ack()
 
@@ -70,3 +71,5 @@ class SafetyWorker(Thread):
         # Start the measurement worker
         measurement_worker = MeasurementWorker()
         measurement_worker.start()
+
+        # TODO: Once the measurement is obtained, turn off over a given temperature
