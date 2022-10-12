@@ -24,8 +24,8 @@ services:
     restart: unless-stopped
     environment:
       - "MODBUS_SERVER_HOST=${MODBUS_SERVER_HOST}"
-      - "RABBITMQ_DEFAULT_USER=${CONTROLLER_RABBITMQ_USERNAME}"
-      - "RABBITMQ_DEFAULT_PASS=${CONTROLLER_RABBITMQ_PASSWORD}"
+      - "CONTROLLER_RABBITMQ_USERNAME"
+      - "CONTROLLER_RABBITMQ_PASSWORD"
     volumes:
       - "/usr/share/hutbee/temperatures.csv:/app/temperatures.csv"
     devices:
