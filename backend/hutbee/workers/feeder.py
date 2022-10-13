@@ -36,11 +36,13 @@ class Worker(ConsumerMixin):
 
     def monitor_temperature(self, body: Any, message: kombu.Message):
         """Monitor the temperature."""
-        if body["temperature"] < 5 or body["temperature"] > 15:
+        timestamp = body["date"]
+        temperature = body["values"]["temperature"]
+        if temperature < 5 or temperature > 15:
             # Temperature requiring attention, notifying managers
             if (datetime.now() - self.last_notification) > timedelta(minutes=1):
                 notify_managers(
-                    f"Temperature requires attention: {body['temperature']}°C"
+                    f"Temperature requires attention: {temperature}°C ({timestamp})"
                 )
 
 
