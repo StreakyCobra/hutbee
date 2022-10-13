@@ -199,9 +199,20 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", Telegram.start))
     dp.add_handler(CommandHandler("login", Telegram.login, pass_args=True))
-    dp.add_handler(CommandHandler("heating_status", Telegram.heating_status))
-    dp.add_handler(CommandHandler("turn_heating_on", Telegram.turn_heating_on))
-    dp.add_handler(CommandHandler("turn_heating_off", Telegram.turn_heating_off))
+    dp.add_handler(
+        CommandHandler(
+            "heating_status",
+            Telegram.heating_status,
+            filters=authenticated,
+        )
+    )
+    dp.add_handler(
+        CommandHandler(
+            "history",
+            Telegram.history,
+            filters=authenticated,
+        )
+    )
     dp.add_handler(
         CommandHandler(
             "measurements",
@@ -211,8 +222,15 @@ def main():
     )
     dp.add_handler(
         CommandHandler(
-            "history",
-            Telegram.history,
+            "turn_heating_on",
+            Telegram.turn_heating_on,
+            filters=authenticated,
+        )
+    )
+    dp.add_handler(
+        CommandHandler(
+            "turn_heating_off",
+            Telegram.turn_heating_off,
             filters=authenticated,
         )
     )
