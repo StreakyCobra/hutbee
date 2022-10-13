@@ -36,6 +36,7 @@ class Worker(ConsumerMixin):
 
     def monitor_temperature(self, body: Any, message: kombu.Message):
         """Monitor the temperature."""
+        logger.info("Monitoring the temperature")
         timestamp = body["date"]
         temperature = body["values"]["temperature"]
         if temperature < 5 or temperature > 15:
