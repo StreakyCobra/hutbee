@@ -39,10 +39,10 @@ class Worker(ConsumerMixin):
         logger.info("Monitoring the temperature")
         timestamp = body["date"]
         temperature = body["values"]["temperature"]
-        if temperature < 5 or temperature > 15:
+        if temperature < 5 or temperature > 20:
             # Temperature requiring attention, notifying managers
             if (datetime.now(timezone.utc) - self.last_notification) > timedelta(
-                minutes=1
+                hours=24
             ):
                 notify_managers(
                     f"Temperature requires attention: {temperature:.1f}°C ({timestamp})"
