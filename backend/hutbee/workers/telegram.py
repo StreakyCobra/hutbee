@@ -30,8 +30,7 @@ BOT = None
 
 
 def send_message(user: User, message: str):
-    if BOT is not None:
-        BOT.send_message(user.telegram_id, message)
+    BOT.send_message(user.telegram_id, message)
 
 
 def send_typing_action(func):

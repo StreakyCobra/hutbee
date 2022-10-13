@@ -45,7 +45,7 @@ class Worker(ConsumerMixin):
                 minutes=1
             ):
                 notify_managers(
-                    f"Temperature requires attention: {temperature}°C ({timestamp})"
+                    f"Temperature requires attention: {temperature:.1f}°C ({timestamp})"
                 )
                 self.last_notification = datetime.now(timezone.utc)
 
