@@ -11,6 +11,7 @@ import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from hutbee import config
 from hutbee.db import DB
+from hutbee.notifications import notify_managers
 from logzero import logger
 
 try:
@@ -22,6 +23,7 @@ except ImportError:
     UWSGI = False
 
 _SCHEDULER = BackgroundScheduler()
+_LAST_STATUS = None
 
 
 class _Message:
@@ -40,6 +42,12 @@ def _healthcheck():
         status = "online"
     else:
         status = "offline"
+
+    global _LAST_STATUS
+    if _LAST_STATUS is not None and status != _LAST_STATUS:
+        # Healthcheck status changed, notifying managers
+        notify_managers(f"Status changed: {status}")
+    _LAST_STATUS = status
 
     DB[config.HEALTHCHECKS_COL].insert_one({"time": datetime.now(), "status": status})
     logger.info(f"Healthcheck, status={status}")

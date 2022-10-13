@@ -14,6 +14,7 @@ class User:
     username: str
     password: str
     telegram_id: Optional[str]
+    is_manager: bool
 
     def set_telegram_id(self, telegram_id):
         DB[USERS_COL].update_one(
@@ -25,7 +26,8 @@ class User:
         return {
             "username": self.username,
             "password": self.password,
-            "telegram_id": self.telegram_id,
+            "telegramId": self.telegram_id,
+            "isManager": self.is_manager,
         }
 
     @staticmethod
@@ -34,4 +36,5 @@ class User:
             username=data["username"],
             password=data["password"],
             telegram_id=data.get("telegramId"),
+            is_manager=data.get("isManager"),
         )

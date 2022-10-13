@@ -2,6 +2,7 @@
 """Hutbee feeder."""
 import os
 import time
+from datetime import datetime, timedelta
 from typing import Any
 
 import kombu
@@ -10,18 +11,20 @@ from logzero import logger
 
 from hutbee import config
 from hutbee.db import DB
+from hutbee.notifications import notify_managers
 
 
 class Worker(ConsumerMixin):
     def __init__(self, connection, queue):
         self.connection = connection
         self.queue = queue
+        self.last_notification = datetime.now()
 
     def get_consumers(self, Consumer, channel):
         return [
             Consumer(
                 queues=self.queue,
-                callbacks=[self.store_measurement],
+                callbacks=[self.store_measurement, self.monitor_temperature],
             )
         ]
 
@@ -30,6 +33,15 @@ class Worker(ConsumerMixin):
         DB[config.MEASUREMENTS_COL].insert_one(body)
         logger.info(f"Measurement processed")
         message.ack()
+
+    def monitor_temperature(self, body: Any, message: kombu.Message):
+        """Monitor the temperature."""
+        if body["temperature"] < 5 or body["temperature"] > 15:
+            # Temperature requiring attention, notifying managers
+            if (datetime.now() - self.last_notification) > timedelta(minutes=1):
+                notify_managers(
+                    f"Temperature requires attention: {body['temperature']}°C"
+                )
 
 
 def main():
