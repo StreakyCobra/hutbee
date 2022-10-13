@@ -2,7 +2,7 @@
 """Hutbee feeder."""
 import os
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import kombu
@@ -18,7 +18,7 @@ class Worker(ConsumerMixin):
     def __init__(self, connection, queue):
         self.connection = connection
         self.queue = queue
-        self.last_notification = datetime.now()
+        self.last_notification = datetime.now(timezone.utc)
 
     def get_consumers(self, Consumer, channel):
         return [
@@ -40,10 +40,13 @@ class Worker(ConsumerMixin):
         temperature = body["values"]["temperature"]
         if temperature < 5 or temperature > 15:
             # Temperature requiring attention, notifying managers
-            if (datetime.now() - self.last_notification) > timedelta(minutes=1):
+            if (datetime.now(timezone.utc) - self.last_notification) > timedelta(
+                minutes=1
+            ):
                 notify_managers(
                     f"Temperature requires attention: {temperature}°C ({timestamp})"
                 )
+                self.last_notification = datetime.now(timezone.utc)
 
 
 def main():
