@@ -33,7 +33,7 @@ def history_plot(cursor: Cursor) -> io.BytesIO:
     )
     data = data.sort_values(["date"])
     data = data.set_index("date")
-    data = data.resample("10 min").mean()
+    data = data.resample("2 min").mean()
     data = data.reset_index()
 
     # Create a figure
