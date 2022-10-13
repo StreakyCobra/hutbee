@@ -4,13 +4,15 @@
 from hutbee.config import USERS_COL
 from hutbee.db import DB
 from hutbee.models.user import User
+from hutbee.workers.telegram import send_message
 from logzero import logger
 
 
 def notify_user(user: User, message):
     """Notify a user with a message."""
     if user.telegram_id:
-        print(f"would notify {user.username}: {message}")
+        logger.info(f"Notifying {user.username}: {message}")
+        send_message(user, message)
     else:
         logger.error(f"Impossible to notify the user {user.username}")
 

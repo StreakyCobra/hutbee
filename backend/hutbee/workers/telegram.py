@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 import kombu
-import pytz
 import requests
 from kombu.mixins import ConsumerMixin
 from logzero import logger
@@ -26,6 +25,13 @@ from telegram.ext import (
     Filters,
     Updater,
 )
+
+BOT = None
+
+
+def send_message(user: User, message: str):
+    if BOT is not None:
+        BOT.send_message(user.telegram_id, message)
 
 
 def send_typing_action(func):
@@ -190,6 +196,9 @@ def main():
     """Run telegram worker."""
     updater = Updater(config.TELEGRAM_BOT_TOKEN, use_context=True)
     atexit.register(updater.stop)
+
+    global BOT
+    BOT = updater.bot
 
     authenticated_chat_ids = {
         user["telegramId"] for user in DB[USERS_COL].find() if "telegramId" in user
